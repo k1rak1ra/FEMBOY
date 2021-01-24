@@ -44,6 +44,6 @@ DD master server:
 - Retrains model
 - Serves retrained model
 
-#Milestones
+# Milestones
 Phase 1:
     Desktop client running in local mode, no DD master server - uses manually trained model data.
