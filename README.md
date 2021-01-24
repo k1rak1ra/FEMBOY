@@ -19,7 +19,7 @@ Mobile clients: (iOS, Android)
 - In server client mode, upload image to server and server returns tags
 
 Desktop clients: (Windows, Linux, MacOS, BSD?)
-- Most likely made using Electron
+- Most likely made using Revery
 - Runs either in local mode or in server client mode
 - In local mode, DD instance is run locally and all images and tag data are saved locally
 - In server client mode, DD instance is run on server and client can either have no images saved locally, only certain tags, only certain images, or all images
