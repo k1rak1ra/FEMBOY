@@ -1,7 +1,7 @@
-# FEMBOY
-Finds Every Match Beyond Ordinary Yearning
-Because it finds all the tags, not just the ones you're looking for
-A comprehensive image management, tagging, and syncing system, all automated
+# F.E.M.B.O.Y.
+Finds Every Match Beyond Ordinary Yearning  
+Because it finds all the tags, not just the ones you're looking for  
+A comprehensive image management, tagging, and syncing system, all automated  
 
 # Project Overview
 Using DeepDanbooru:
