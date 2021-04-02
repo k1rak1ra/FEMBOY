@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.k1ra.FEMBOY_desktop.Edit">
+   <children>
+      <ImageView fx:id="image" fitHeight="100.0" fitWidth="360.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <JFXListView fx:id="tag_list" layoutX="14.0" layoutY="25.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="ap_text_field" prefHeight="200.0" prefWidth="400.0" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <AnchorPane fx:id="loading_pane" prefHeight="50.0" prefWidth="200.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0">
+               <children>
+                  <JFXSpinner AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Text fill="WHITE" layoutX="102.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loading tags..." AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="13.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <Button fx:id="btn_add_tag" layoutX="151.0" layoutY="142.0" mnemonicParsing="false" text="Add" textFill="WHITE" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+            <JFXTextField fx:id="tag" layoutX="110.0" layoutY="88.0" promptText="tag" unFocusColor="WHITE" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+            <AnchorPane AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <HBox alignment="CENTER" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Text fx:id="edit_pane_title" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Add a new tag" textAlignment="CENTER">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+            <Text fx:id="mimetype" fill="WHITE" layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text fx:id="dimensions" fill="WHITE" layoutX="24.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="30.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <Button fx:id="close" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Close" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+      <Button fx:id="save" layoutX="524.0" layoutY="361.0" mnemonicParsing="false" text="Save" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <Button fx:id="previous" layoutX="160.0" layoutY="365.0" mnemonicParsing="false" text="Previous" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="200.0" />
+      <Button fx:id="next" layoutX="346.0" layoutY="365.0" mnemonicParsing="false" text="Next" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="200.0" />
+   </children>
+</AnchorPane>

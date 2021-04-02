@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import javafx.geometry.Insets?>
+<Tab text="LDAP" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.k1ra.FEMBOY_desktop.SettingsLDAP">
+    <content>
+        <AnchorPane fx:id="ap" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0" >
+            <children>
+                <AnchorPane fx:id="ap_general" layoutX="200.0" layoutY="120.0" prefHeight="150.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+                    <children>
+                        <Text fill="WHITE" layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Text>
+                        <HBox alignment="CENTER" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                            <children>
+                                <Button fx:id="btn_ldap_connect" mnemonicParsing="false" prefWidth="100.0" text="Connect" textFill="WHITE" />
+                            </children>
+                        </HBox>
+                        <GridPane layoutX="-15.0" layoutY="60.0" prefHeight="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <JFXTextField fx:id="ldap_server" promptText="ldap://k1ra.local">
+                                            <VBox.margin>
+                                                <Insets right="10.0" />
+                                            </VBox.margin>
+                                        </JFXTextField>
+                                        <JFXTextField fx:id="ldap_bind_user" promptText="Bind user (blank if none)">
+                                            <VBox.margin>
+                                                <Insets right="10.0" top="10.0" />
+                                            </VBox.margin>
+                                        </JFXTextField>
+                                    </children>
+                                </VBox>
+                                <VBox GridPane.columnIndex="1">
+                                    <children>
+                                        <JFXCheckBox fx:id="ldap_tls" text="Use StartTLS" textFill="WHITE">
+                                            <VBox.margin>
+                                                <Insets left="10.0" top="4.0" />
+                                            </VBox.margin>
+                                        </JFXCheckBox>
+                                        <JFXPasswordField fx:id="ldap_bind_password" promptText="Bind password (blank if none)">
+                                            <VBox.margin>
+                                                <Insets left="10.0" top="13.0" />
+                                            </VBox.margin>
+                                        </JFXPasswordField>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </GridPane>
+                    </children>
+                </AnchorPane>
+                <GridPane layoutX="200.0" layoutY="204.0" prefHeight="370.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <AnchorPane fx:id="ap_user" maxHeight="330.0" prefHeight="330.0" prefWidth="200.0">
+                            <GridPane.margin>
+                                <Insets bottom="30.0" left="30.0" right="15.0" />
+                            </GridPane.margin>
+                            <children>
+                                <Text fill="WHITE" layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Users:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Text>
+                                <Text fill="WHITE" layoutX="20.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DN:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="42.0">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Text>
+                                <JFXTextField fx:id="ldap_user_dn" layoutX="50.0" layoutY="36.0" promptText="cn=users,cn=accounts,dc=k1ra,dc=local" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="36.0" />
+                                <Text fill="WHITE" layoutX="26.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="75.0">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Text>
+                                <Text fill="WHITE" layoutX="25.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="UID attribute:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="116.0">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Text>
+                                <JFXTextField fx:id="ldap_user_filter" layoutX="80.0" layoutY="70.0" promptText="uid={user}" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+                                <JFXTextField fx:id="ldap_user_uid_attribute" layoutX="80.0" layoutY="110.0" promptText="uidNumber" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="110.0" />
+                                <HBox alignment="CENTER" layoutX="22.0" layoutY="154.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+                                    <children>
+                                        <Button fx:id="btn_user_save" mnemonicParsing="false" text="Save" textFill="WHITE" />
+                                    </children>
+                                </HBox>
+                                <Text fill="WHITE" layoutX="20.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Config test:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="230.0">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Text>
+                                <JFXTextField fx:id="user_test" layoutX="75.0" layoutY="268.0" promptText="Enter a user" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="255.0" />
+                                <HBox alignment="CENTER" layoutX="22.0" layoutY="289.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="290.0">
+                                    <children>
+                                        <Button fx:id="btn_user_test" mnemonicParsing="false" text="Fetch details" textFill="WHITE" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="ap_group" maxHeight="330.0" minHeight="330.0" prefHeight="330.0" prefWidth="200.0" GridPane.columnIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="30.0" left="15.0" right="30.0" />
+                            </GridPane.margin>
+                            <children>
+                                <Text fill="WHITE" layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Groups:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Text>
+                                <Text fill="WHITE" layoutX="20.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DN:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="42.0">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Text>
+                                <JFXTextField fx:id="ldap_group_dn" layoutX="50.0" layoutY="36.0" promptText="cn=groups,cn=compat,dc=k1ra,dc=local" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="36.0" />
+                                <Text fill="WHITE" layoutX="26.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="75.0">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Text>
+                                <Text fill="WHITE" layoutX="25.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="group name attribute:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="116.0">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Text>
+                                <JFXTextField fx:id="ldap_group_filter" layoutX="80.0" layoutY="70.0" promptText="(&amp;(objectClass=posixGroup)(memberUid={user}))" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+                                <JFXTextField fx:id="ldap_group_name_attribute" layoutX="80.0" layoutY="110.0" promptText="cn" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="110.0" />
+                                <JFXTextField fx:id="ldap_admin_group_name" layoutX="86.0" layoutY="147.0" promptText="admins" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="147.0" />
+                                <Text fill="WHITE" layoutX="33.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin group name:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="155.0">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Text>
+                                <HBox alignment="CENTER" layoutX="28.0" layoutY="180.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="185.0">
+                                    <children>
+                                        <Button fx:id="btn_group_save" mnemonicParsing="false" text="Save" textFill="WHITE" />
+                                    </children>
+                                </HBox>
+                                <Text fill="WHITE" layoutX="23.0" layoutY="253.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Config test:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="230.0">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Text>
+                                <JFXTextField fx:id="group_test" layoutX="47.0" layoutY="261.0" promptText="Enter a user" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="255.0" />
+                                <HBox alignment="CENTER" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="290.0">
+                                    <children>
+                                        <Button fx:id="btn_group_test" mnemonicParsing="false" text="Fetch groups" textFill="WHITE" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </GridPane>
+            </children>
+        </AnchorPane>
+    </content>
+</Tab>

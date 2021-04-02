@@ -1,0 +1,10 @@
+.progress-bar .bar {
+    -fx-padding: 1px;
+    -fx-background-insets: 0;
+}
+.track {
+    -fx-control-inner-background: #2f3136;
+    -fx-text-box-border: #2f3136;
+    -fx-background-color: #2f3136;
+    -fx-background-insets:  0, 1;
+}

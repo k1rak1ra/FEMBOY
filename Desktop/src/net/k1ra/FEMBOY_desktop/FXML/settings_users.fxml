@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<Tab text="Users" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.k1ra.FEMBOY_desktop.SettingsUsers">
+  <content>
+    <AnchorPane fx:id="ap" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0">
+        <children>
+            <JFXTreeTableView fx:id="table" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+            <Text fx:id="status" fill="WHITE" layoutX="18.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="18.0" AnchorPane.topAnchor="18.0">
+                <font>
+                    <Font size="16.0" />
+                </font></Text>
+            <Button layoutX="524.0" textFill="WHITE" layoutY="15.0" mnemonicParsing="false" text="New user" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="12.0" fx:id="btn_new" />
+            <AnchorPane fx:id="cover_pane" opacity="0.6" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <AnchorPane fx:id="password_pane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <children>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <children>
+                            <VBox alignment="CENTER">
+                                <children>
+                                    <AnchorPane fx:id="password_modal" prefHeight="170.0" prefWidth="300.0">
+                                        <children>
+                                            <Text fill="WHITE" layoutX="120.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Change password" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="11.0">
+                                                <font>
+                                                    <Font size="18.0" />
+                                                </font>
+                                            </Text>
+                                            <JFXPasswordField fx:id="pw_1" layoutX="73.0" layoutY="75.0" promptText="New password again" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
+                                            <JFXPasswordField fx:id="pw_2" layoutX="73.0" layoutY="32.0" promptText="New password" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0" />
+                                            <Button fx:id="btn_pw_confirm" layoutX="219.0" layoutY="131.0" mnemonicParsing="false" prefWidth="100.0" text="Confirm" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                                            <Button fx:id="btn_pw_cancel" layoutX="14.0" layoutY="131.0" mnemonicParsing="false" prefWidth="100.0" text="Cancel" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
+                                        </children></AnchorPane>
+                                </children>
+                            </VBox>
+                        </children>
+                    </HBox>
+                </children>
+            </AnchorPane>
+            <AnchorPane fx:id="new_user_pane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <children>
+                    <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <children>
+                            <VBox alignment="CENTER">
+                                <children>
+                                    <AnchorPane fx:id="new_user_modal" prefHeight="230.0" prefWidth="300.0">
+                                        <children>
+                                            <Text fill="WHITE" layoutX="97.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create user" AnchorPane.leftAnchor="97.0" AnchorPane.rightAnchor="97.8125" AnchorPane.topAnchor="14.177734375">
+                                                <font>
+                                                    <Font size="18.0" />
+                                                </font>
+                                            </Text>
+                                            <JFXTextField fx:id="new_name" promptText="User name" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0" />
+                                            <JFXPasswordField fx:id="new_pw_1" layoutX="73.0" layoutY="75.0" promptText="Password again" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="110.0" />
+                                            <JFXPasswordField fx:id="new_pw_2" layoutX="73.0" layoutY="32.0" promptText="Password" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
+                                            <Button fx:id="btn_user_confirm" layoutX="219.0" layoutY="131.0" mnemonicParsing="false" prefWidth="100.0" text="Confirm" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                                            <Button fx:id="btn_user_cancel" layoutX="14.0" layoutY="131.0" mnemonicParsing="false" prefWidth="100.0" text="Cancel" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
+                                            <JFXCheckBox fx:id="new_is_admin" layoutX="20.0" layoutY="149.0" text="Is admin" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="149.0">
+                                                <font>
+                                                    <Font size="14.0" />
+                                                </font>
+                                            </JFXCheckBox>
+                                        </children></AnchorPane>
+                                </children>
+                            </VBox>
+                        </children>
+                    </HBox>
+                </children>
+            </AnchorPane>
+        </children>
+    </AnchorPane>
+  </content>
+</Tab>

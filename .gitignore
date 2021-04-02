@@ -1,0 +1,22 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
+*.zip
+*.jar
+Desktop/out/artifacts/Desktop_jar/FEMBOY
+Server/out/artifacts/FEMBOY_server_jar/FEMBOY_server
+*.h5

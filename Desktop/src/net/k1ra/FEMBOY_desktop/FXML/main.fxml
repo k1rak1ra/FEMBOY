@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<AnchorPane fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.k1ra.FEMBOY_desktop.Controller">
+   <children>
+      <ScrollPane fx:id="sp" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <content>
+            <JFXMasonryPane fx:id="mp">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </padding>
+            </JFXMasonryPane>
+         </content>
+      </ScrollPane>
+      <ProgressBar fx:id="upload_progress" maxHeight="2.0" maxWidth="220.0" minHeight="2.0" minWidth="220.0" prefHeight="2.0" prefWidth="220.0" progress="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="17.0" />
+      <Button fx:id="btn_upload" layoutX="45.0" layoutY="14.0" maxWidth="220.0" minWidth="220.0" mnemonicParsing="false" prefWidth="220.0" text="Upload image" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="btn_settings" layoutX="46.0" layoutY="351.0" maxWidth="220.0" minWidth="220.0" mnemonicParsing="false" prefWidth="220.0" text="Settings" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
+      <HBox alignment="CENTER" prefWidth="200.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Text fx:id="empty_msg" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <AnchorPane fx:id="status_pane" prefHeight="110.0" prefWidth="220.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="65.0">
+         <children>
+            <Text fill="WHITE" layoutX="78.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Status:" textAlignment="CENTER" AnchorPane.leftAnchor="78.0" AnchorPane.rightAnchor="78.578125" AnchorPane.topAnchor="7.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
+               <children>
+                  <Text fx:id="status_line" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" />
+               </children>
+            </HBox>
+            <Button fx:id="btn_status_action" layoutX="88.0" layoutY="50.0" mnemonicParsing="false" textFill="WHITE" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
+            <HBox alignment="CENTER" layoutX="95.0" layoutY="88.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="85.0">
+               <children>
+                  <Text fx:id="result_num_line" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="ap_search" layoutX="30.0" layoutY="100.0" maxWidth="220.0" minWidth="220.0" prefWidth="220.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="190.0">
+         <children>
+            <Text fill="WHITE" layoutX="35.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search with tags" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="34.2412109375" AnchorPane.topAnchor="7.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <JFXTextField fx:id="search_field" layoutX="33.0" layoutY="48.0" promptText="enter a tag" unFocusColor="WHITE" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0" />
+            <Button fx:id="btn_add_tag" layoutX="80.0" layoutY="65.0" mnemonicParsing="false" text="Add" textFill="WHITE" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0" />
+            <AnchorPane fx:id="ap_tag_list" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0">
+               <children>
+                  <JFXListView fx:id="tag_list" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <JFXSpinner fx:id="loading" layoutX="211.0" layoutY="23.0" prefHeight="20.0" prefWidth="20.0" AnchorPane.leftAnchor="215.0" AnchorPane.topAnchor="22.0" />
+      <AnchorPane fx:id="intro_cover_pane" opacity="0.6" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="step_1_modal_container" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <AnchorPane fx:id="step_1_modal" maxHeight="400.0" maxWidth="400.0" prefHeight="400.0" prefWidth="400.0">
+                           <children>
+                              <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                 <children>
+                                    <VBox alignment="CENTER">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="4.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="WELCOME">
+                                             <font>
+                                                <Font size="25.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to F.E.M.B.O.Y.">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=" - the better way to organize your images!">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="The program can operate by itself or connect to a server." textAlignment="CENTER" wrappingWidth="320.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="If you have not set up a server or are unsure about which option to pick, you should probably choose to use the program by itself." textAlignment="CENTER" wrappingWidth="340.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <Button fx:id="btn_local" layoutX="172.0" layoutY="222.0" mnemonicParsing="false" text="Use the program by itself" textFill="WHITE" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                              <Button fx:id="btn_server" layoutX="134.0" layoutY="341.0" mnemonicParsing="false" text="Connect to a server" textFill="WHITE" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="step_2_modal_container" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <AnchorPane fx:id="step_2_modal" maxHeight="150.0" maxWidth="400.0" prefHeight="150.0" prefWidth="400.0">
+                           <children>
+                              <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0">
+                                 <children>
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter server address:">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <Button fx:id="btn_step2_connect" layoutX="134.0" layoutY="341.0" mnemonicParsing="false" text="Connect" textFill="WHITE" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                              <JFXTextField fx:id="step2_server_field" layoutX="123.0" layoutY="46.0" promptText="http://example.com" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="45.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="loading_modal_container" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <AnchorPane fx:id="loading_modal" maxHeight="150.0" maxWidth="400.0" prefHeight="150.0" prefWidth="400.0">
+                           <children>
+                              <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0">
+                                 <children>
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Please wait...">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <JFXSpinner layoutX="175.0" layoutY="50.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="175.0" AnchorPane.topAnchor="50.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="sql_setup_modal_container" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <AnchorPane fx:id="sql_setup_modal" maxHeight="425.0" maxWidth="400.0" minHeight="425.0" minWidth="400.0" prefHeight="425.0" prefWidth="400.0">
+                           <children>
+                              <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                 <children>
+                                    <VBox alignment="CENTER">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="4.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Server setup">
+                                             <font>
+                                                <Font size="25.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="The server you connected to has not been set up yet." textAlignment="CENTER" wrappingWidth="300.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="You need to connect it to a mySQL server and create a password for the root account." textAlignment="CENTER" wrappingWidth="353.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="SQL setup:" wrappingWidth="320.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXTextField fx:id="sql_address" promptText="Address (example.com:3306)">
+                                             <VBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="sql_dbname" promptText="Database name">
+                                             <VBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="sql_user" promptText="Username">
+                                             <VBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
+                                          <JFXPasswordField fx:id="sql_password" promptText="Password">
+                                             <VBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </VBox.margin>
+                                          </JFXPasswordField>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="root password setup:" wrappingWidth="320.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXPasswordField fx:id="root_password_1" promptText="Password">
+                                             <VBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </VBox.margin>
+                                          </JFXPasswordField>
+                                          <JFXPasswordField fx:id="root_password_2" promptText="Password again">
+                                             <VBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </VBox.margin>
+                                          </JFXPasswordField>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <Button fx:id="btn_sql_continue" layoutX="134.0" layoutY="341.0" mnemonicParsing="false" text="Continue" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="done_modal_container" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <AnchorPane fx:id="done_modal" maxHeight="140.0" maxWidth="400.0" prefHeight="140.0" prefWidth="400.0">
+                           <children>
+                              <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                 <children>
+                                    <VBox alignment="CENTER">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="4.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="SUCCESS">
+                                             <font>
+                                                <Font size="25.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Your server has been set up and you are logged into the root account!" textAlignment="CENTER" wrappingWidth="300.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <Button fx:id="btn_setup_done" layoutX="134.0" layoutY="341.0" mnemonicParsing="false" text="Start using FEMBOY" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="login_modal_container" layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <AnchorPane fx:id="login_modal" maxHeight="155.0" maxWidth="400.0" prefHeight="155.0" prefWidth="400.0">
+                           <children>
+                              <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                 <children>
+                                    <VBox alignment="CENTER">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="4.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="LOGIN">
+                                             <font>
+                                                <Font size="25.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXTextField fx:id="login_user" prefWidth="320.0" promptText="username" />
+                                          <JFXPasswordField fx:id="login_password" promptText="password" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <Button fx:id="btn_login" layoutX="134.0" layoutY="341.0" mnemonicParsing="false" text="Login" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="ap" prefHeight="22.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.k1ra.FEMBOY_desktop.TagCell">
+   <children>
+      <Text fx:id="booru_tag" fill="WHITE" fontSmoothingType="LCD" layoutX="76.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text" textAlignment="CENTER" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="2.0" />
+      <ImageView fx:id="btn_tag_del" fitHeight="20.0" fitWidth="25.0" layoutX="136.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="1.0">
+         <image>
+            <Image url="@../../../../images/delete.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

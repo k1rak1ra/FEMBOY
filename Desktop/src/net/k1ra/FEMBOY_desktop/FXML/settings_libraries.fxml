@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<Tab text="Libraries used" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.k1ra.FEMBOY_desktop.SettingsLibraries">
+  <content>
+    <AnchorPane fx:id="ap" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0" >
+      <children>
+        <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+          <children>
+            <VBox alignment="TOP_CENTER">
+              <children>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Open-source libraries used">
+                  <font>
+                    <Font size="18.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="in FEMBOY desktop and server">
+                  <font>
+                    <Font size="16.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="com.jfoenix:jfoenix - Nice UI in desktop app" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="ai.djl:api + tensorflow - Easy TensorFlow model interface for Java" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="com.zaxxer:HikariCP - The best SQL connection pool" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="org.bytedeco:javacpp - TensorFlow dependency" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="org.json:json - Best JSON parser ever" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="org.mindrot:jbcrypt - BCrypt for server-side password encryption" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="org.slf4j:slf4j-simple - TensorFlow dependency" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="org.xerial.sqlite-jdbc - SQLite JDBC for client" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="mysql:mysql-connector-java - MySQL JDBC for server" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="berkelydb:je - Key-Value storage for server settings independent of SQL" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="org.ldaptive:ldaptive - LDAP integration for server" >
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Text>
+              </children>
+            </VBox>
+          </children>
+        </HBox>
+      </children>
+    </AnchorPane>
+  </content>
+</Tab>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Tab text="About" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.k1ra.FEMBOY_desktop.SettingsAbout">
+  <content>
+    <AnchorPane fx:id="ap" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0">
+        <children>
+            <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                <children>
+                    <VBox alignment="TOP_CENTER">
+                        <children>
+                            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="F.E.M.B.O.Y.">
+                                <font>
+                                    <Font size="24.0" />
+                                </font>
+                            </Text>
+                            <Text fx:id="version" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <Text fx:id="feature_level" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                                <font>
+                                    <Font size="15.0" />
+                                </font>
+                            </Text>
+                            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="By k1ra, 2021" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" />
+                            <Text fx:id="server" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                                <font>
+                                    <Font size="18.0" />
+                                </font>
+                            </Text>
+                            <Text fx:id="user" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                                <font>
+                                    <Font size="18.0" />
+                                </font>
+                            </Text>
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" />
+                            <Button fx:id="btn_logout" mnemonicParsing="false" prefWidth="180.0" text="Log out of this device" textFill="WHITE" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                                <font>
+                                    <Font size="5.0" />
+                                </font>
+                            </Text>
+                            <Button fx:id="btn_logout_all" mnemonicParsing="false" prefWidth="180.0" text="Log out of ALL devices" textFill="WHITE" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                                <font>
+                                    <Font size="5.0" />
+                                </font>
+                            </Text>
+                            <Button fx:id="btn_reset" mnemonicParsing="false" prefWidth="180.0" text="Delete all local data" textFill="WHITE" />
+                        </children>
+                    </VBox>
+                </children>
+            </HBox>
+        </children></AnchorPane>
+  </content>
+</Tab>
