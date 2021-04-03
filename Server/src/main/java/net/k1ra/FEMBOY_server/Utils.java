@@ -66,9 +66,9 @@ public class Utils {
         else if (os.contains("mac"))
             return System.getProperty("user.home") + "/Library/Application Support/FEMBOY-server/";
         else if (os.contains("nux"))
-            return System.getProperty("user.home") + "/.FEMBOY-server/";
+            return System.getProperty("user.home") + "/FEMBOY-server/";
         else
-            return System.getProperty("user.dir") + "/.FEMBOY-server/";
+            return System.getProperty("user.dir") + "/FEMBOY-server/";
     }
 
     public static boolean connect_mysql(PageParams... p) {

@@ -81,13 +81,13 @@ public class DatabaseAbstractionLayer {
 
     public static void create_tables_mysql() {
         try {
-            PreparedStatement smt = conn.prepareStatement("CREATE TABLE `FEMBOY`.`user_sessions` (\n" +
+            PreparedStatement smt = conn.prepareStatement("CREATE TABLE `user_sessions` (\n" +
                     "  `id` INT NOT NULL AUTO_INCREMENT,\n" +
                     "  `uid` INT NULL,\n" +
                     "  `admin` INT NULL,\n" +
                     "  `token` VARCHAR(500) NULL,\n" +
                     "  PRIMARY KEY (`id`));");
-            smt.addBatch("CREATE TABLE `FEMBOY`.`users` (\n" +
+            smt.addBatch("CREATE TABLE `users` (\n" +
                     "  `uid` INT NOT NULL AUTO_INCREMENT,\n" +
                     "  `name` VARCHAR(500) NULL,\n" +
                     "  `password` VARCHAR(500) NULL,\n" +

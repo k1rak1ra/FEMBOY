@@ -581,6 +581,7 @@ public class Controller implements Initializable {
             hide_intro_pane();
             reload_image_pane();
             refresh_auto_suggestions();
+            update_status_line();
         });
 
     }
@@ -603,6 +604,7 @@ public class Controller implements Initializable {
                 hide_intro_pane();
                 reload_image_pane();
                 refresh_auto_suggestions();
+                update_status_line();
 
             }, ()->{
                 login_modal.setMouseTransparent(false);

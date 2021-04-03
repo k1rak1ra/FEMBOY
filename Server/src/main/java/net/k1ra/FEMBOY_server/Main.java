@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Main {
         System.out.println("FEMBOY server feature level "+server_feature_level+" stating up.");
 
         //check for data/folder and create if does not exit
-        if (!Files.exists(Paths.get(Utils.get_local_storage_dir()))) {
+        if (!Files.exists(Paths.get(Utils.get_local_storage_dir())) || !Files.exists(Path.of(Utils.get_local_storage_dir() + "images/"))) {
             System.out.println("Application data directory does not exist. Creating it at "+Utils.get_local_storage_dir());
             new File(Utils.get_local_storage_dir()).mkdir();
             new File(Utils.get_local_storage_dir()+"images/").mkdir();
@@ -102,7 +103,8 @@ public class Main {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                DatabaseAbstractionLayer.get_users();
+                if (ConfigDatabase.get("setup_done") != null)
+                    DatabaseAbstractionLayer.get_users();
             }
         }, 0, 2 * 60 * 1000);
 
@@ -110,19 +112,21 @@ public class Main {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                List<String> tags = new ArrayList<>();
-                List<DatabaseAbstractionLayer.ImageIDAspect> images = DatabaseAbstractionLayer.get_images_with_tags(new ArrayList<>());
+                if (ConfigDatabase.get("setup_done") != null) {
+                    List<String> tags = new ArrayList<>();
+                    List<DatabaseAbstractionLayer.ImageIDAspect> images = DatabaseAbstractionLayer.get_images_with_tags(new ArrayList<>());
 
-                for (DatabaseAbstractionLayer.ImageIDAspect image : images) {
-                    List<String> img_tags = DatabaseAbstractionLayer.get_img_tags(image.id);
-                    for (String tag : img_tags)
-                        if (!tags.contains(tag))
-                            tags.add(tag);
+                    for (DatabaseAbstractionLayer.ImageIDAspect image : images) {
+                        List<String> img_tags = DatabaseAbstractionLayer.get_img_tags(image.id);
+                        for (String tag : img_tags)
+                            if (!tags.contains(tag))
+                                tags.add(tag);
 
+                    }
+                    DatabaseAbstractionLayer.purge_global_tag_list();
+                    DatabaseAbstractionLayer.update_global_tag_list(tags);
+                    System.out.println("Hourly all_tag list tag recheck");
                 }
-                DatabaseAbstractionLayer.purge_global_tag_list();
-                DatabaseAbstractionLayer.update_global_tag_list(tags);
-                System.out.println("Hourly all_tag list tag recheck");
             }
         }, 0, 60 * 60 * 1000);
     }
