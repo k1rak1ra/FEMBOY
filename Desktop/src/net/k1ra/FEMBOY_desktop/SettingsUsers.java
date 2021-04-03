@@ -82,7 +82,7 @@ public class SettingsUsers implements Initializable {
         });
 
         JFXTreeTableColumn<User, String> col_name = new JFXTreeTableColumn<>("Name");
-        col_name.setPrefWidth(200);
+        col_name.setPrefWidth(300);
         col_name.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, String> param) ->{
             if(col_name.validateValue(param)) return param.getValue().getValue().name;
             else return col_name.getComputedValue(param);
@@ -191,6 +191,7 @@ public class SettingsUsers implements Initializable {
         table.setShowRoot(false);
         table.setEditable(true);
         table.getColumns().setAll(col_uid, col_name, col_admin, col_pwd, col_delet);
+        table.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
 
         Settings.scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
             col_name.setMinWidth(newSceneWidth.doubleValue()-col_uid.getWidth()-col_admin.getWidth()-col_pwd.getWidth()-col_delet.getWidth()-2);

@@ -49,7 +49,7 @@ public class Main extends Application {
         Controller controller = loader.getController();
         controller.stage = primary_stage;
 
-        primary_stage.setTitle("F.E.M.B.O.Y. - desktop - local mode");
+        primary_stage.setTitle("F.E.M.B.O.Y. - desktop");
         primary_stage.setScene(new Scene(root, 600, 600));
         primary_stage.setMinHeight(600);
         primary_stage.setMinWidth(600);

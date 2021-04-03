@@ -25,14 +25,15 @@ Mobile client (INCOMPLETE): (iOS, Android)
 - In server client mode, upload image to server and server returns tags
 
 Desktop client (Version 0.1.0 available): (Windows, Linux, MacOS, BSD?)
-- Requires Java 11+
+- Requires Java 11+ for Linux or ONLY Java 1.8 for Windows and JAR
 - Runs either in local mode or in server client mode
 - In local mode, DD instance is run locally and all images and tag data are saved locally
 - In server client mode, DD instance is run on server and client can select some images to be saved locally
 - In server client mode, the server performs the computationally/RAM-intensive TensorFlow image tagging operations
 
 Server (Version 0.1.0 available): 
-- Requires Java 11 and an existing mySQL server
+- Requires Java 11+ on all platforms
+- Requires a mySQL server
 - Has user accounts that clients need to use to login
 - LDAP support
 - Server API documentation coming soon so you can make your own client

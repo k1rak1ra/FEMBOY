@@ -177,10 +177,9 @@ public class Controller implements Initializable {
                     settings.scene = scene;
                     Stage stage = new Stage();
                     stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.setMaximized(true);
                     stage.setTitle("Settings");
-                    stage.setMinHeight(600);
-                    stage.setMinWidth(600);
+                    stage.setMinHeight(700);
+                    stage.setMinWidth(700);
                     stage.setScene(scene);
                     stage.show();
                     settings.init();
