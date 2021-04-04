@@ -98,6 +98,7 @@ public class Controller implements Initializable {
     static BooleanProperty is_loading = new SimpleBooleanProperty(false);
     boolean showing_no_internet_dialog = false;
     int status = 0;
+    List<Image> images = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -243,11 +244,7 @@ public class Controller implements Initializable {
                                         upload_progress.setProgress(i_f/(double)files.size());
                                         ids.add(out.obj.getInt("id"));
                                         upload_tread_done = true;
-                                    }, ()->{
-                                        loading.setVisible(false);
-                                        btn_upload.setDisable(false);
-                                        set_standard_loading();
-                                    }, true);
+                                    }, ()-> upload_tread_done = true, true);
 
                                     //wait until upload is done, do one by one
                                     while (!upload_tread_done) {}
@@ -264,24 +261,31 @@ public class Controller implements Initializable {
                                     btn_upload.setDisable(false);
                                     set_standard_loading();
 
-                                    try {
-                                        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/edit.fxml"));
-                                        Pane pane = loader.load();
-                                        Stage stage = new Stage();
-                                        Scene scene = new Scene(pane);
+                                    if (ids.size() > 0) {
+                                        try {
+                                            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/edit.fxml"));
+                                            Pane pane = loader.load();
+                                            Stage stage = new Stage();
+                                            Scene scene = new Scene(pane);
 
-                                        Edit edit = loader.getController();
-                                        edit.multi(ids, images, scene, stage, () -> { refresh_auto_suggestions(); reload_image_pane();});
+                                            Edit edit = loader.getController();
+                                            edit.multi(ids, images, scene, stage, () -> {
+                                                refresh_auto_suggestions();
+                                                if (filter_tags.size() > 0) {
+                                                    reload_image_pane();
+                                                }
+                                            });
 
-                                        stage.initModality(Modality.APPLICATION_MODAL);
-                                        stage.setMaximized(true);
-                                        stage.setTitle("Tag editor");
-                                        stage.setMinHeight(600);
-                                        stage.setMinWidth(600);
-                                        stage.setScene(scene);
-                                        stage.show();
-                                    } catch (Exception e) {
-                                        Utils.handle_error(e.toString());
+                                            stage.initModality(Modality.APPLICATION_MODAL);
+                                            stage.setMaximized(true);
+                                            stage.setTitle("Tag editor");
+                                            stage.setMinHeight(600);
+                                            stage.setMinWidth(600);
+                                            stage.setScene(scene);
+                                            stage.show();
+                                        } catch (Exception e) {
+                                            Utils.handle_error(e.toString());
+                                        }
                                     }
                             });
                         }
@@ -689,6 +693,11 @@ public class Controller implements Initializable {
             mp.getChildren().clear();
             inhibit_mp_reload = true;
 
+            for (Image i : images)
+                i.cancel();
+
+            images.clear();
+
             if (DatabaseAbstractionLayer.get_mode() == 1 || !logged_in.getValue() || offline.getValue()) {
                 List<DatabaseAbstractionLayer.ImageIDAspect> items = DatabaseAbstractionLayer.get_images_with_tags(filter_tags);
                 mp.setLimitRow(items.size() + 10);
@@ -735,7 +744,7 @@ public class Controller implements Initializable {
         }
     }
 
-    void put_image_into_pane(int id, float aspect) {
+    void put_image_into_pane(Integer id, float aspect) {
         String file_path;
         String file_extension = null;
 
@@ -748,6 +757,9 @@ public class Controller implements Initializable {
             else if (Files.exists(Paths.get(Utils.get_local_storage_dir() + "images/" + id + ".png")))
                 file_extension = ".png";
         }
+
+        if (DatabaseAbstractionLayer.get_mode() == 0)
+            file_extension = ".png";
 
         //inner class shit, make final version of file extension
         final String file_extension_final = file_extension;
@@ -765,156 +777,166 @@ public class Controller implements Initializable {
 
                 //load image
                 file = new File(file_path);
-                img_i = new Image(file.toURI().toString(), 185*2, 185*2*aspect, true, false, true);
+                img_i = new Image(file.toURI().toString(), 185, 185*aspect, true, false, true);
             } else {
-                img_i = new Image(NetworkRequest.server_url+"/image/"+id, 185*2, 185*2*aspect, true, false, true);
+                img_i = new Image(NetworkRequest.server_url+"/image/"+id, 185, 185*aspect, true, false, true);
             }
 
+            images.add(img_i);
             final Image img_f = img_i;
             final File[] img_file = {file};
             image.setImage(img_f);
 
-
-            Label l = new Label(null, image);
+            final Label l = new Label(null, image);
             l.setOnMouseClicked(event -> {
-                    try {
-                        if (DatabaseAbstractionLayer.get_mode() == 0) {
-                            if (DatabaseAbstractionLayer.get_img_tags(id) == null) {
-                                URL url = new URL(NetworkRequest.server_url + "/image/" + id);
-                                BufferedImage img = ImageIO.read(url);
-                                img_file[0] = new File(Utils.get_local_storage_dir() + "temp.png");
-                                ImageIO.write(img, "png", img_file[0]);
-                            } else {
-                                img_file[0] = new File(Utils.get_local_storage_dir() + "images/" + id + ".png");
-                            }
-                        }
-
-                        if (event.getButton() == MouseButton.SECONDARY) {
-                            //show context menu with options
-                            ContextMenu context_menu = new ContextMenu();
-                            MenuItem clipboard = new MenuItem("Copy to clipboard");
-                            MenuItem save = new MenuItem("Save as");
-                            MenuItem edit_tags = new MenuItem("Edit tags");
-                            MenuItem delete = new MenuItem("Delete");
-                            CheckMenuItem offline = new CheckMenuItem("Available offline");
-
-                            clipboard.setOnAction(event1 -> {
-                                final Clipboard clipboard1 = Clipboard.getSystemClipboard();
-                                final ClipboardContent content = new ClipboardContent();
-
-                                content.putImage(img_f);
-                                clipboard1.setContent(content);
-                            });
-
-                            save.setOnAction(event12 -> {
-                                FileChooser file_chooser = new FileChooser();
-                                FileChooser.ExtensionFilter ext_filter = new FileChooser.ExtensionFilter("Image file", "*" + file_extension_final);
-                                file_chooser.getExtensionFilters().add(ext_filter);
-
-                                //Show save file dialog
-                                File file1 = file_chooser.showSaveDialog(stage);
-
-                                if (file1 != null) {
-                                    File out = new File(file1.getAbsolutePath() + file_extension_final);
-                                    Utils.copy_image(img_file[0], out);
-                                }
-                            });
-
-                            edit_tags.setOnAction(event2 -> {
-                                    try {
-                                        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/edit.fxml"));
-                                        Pane pane = loader.load();
-                                        Stage stage = new Stage();
-                                        Scene scene = new Scene(pane);
-
-                                        Edit edit = loader.getController();
-                                        edit.populate(id, (DatabaseAbstractionLayer.get_mode() == 1 || Controller.offline.getValue() || !Controller.logged_in.getValue())?
-                                                        img_file[0].getAbsolutePath() : null,
-                                                scene, stage, true, true, () -> {
-                                            refresh_auto_suggestions();
-                                            reload_image_pane();
-                                        });
-
-                                        stage.initModality(Modality.APPLICATION_MODAL);
-                                        stage.setScene(scene);
-                                        stage.setMaximized(true);
-                                        stage.setTitle("Tag editor");
-                                        stage.setMinHeight(600);
-                                        stage.setMinWidth(600);
-                                        stage.show();
-                                    } catch (Exception e) {
-                                        Utils.handle_error(e.toString());
-                                    }
-                                });
-
-                            delete.setOnAction(event13 -> {
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                alert.setTitle("Delete image");
-                                alert.setHeaderText("Are you sure you want to delete this image?");
-
-                                alert.showAndWait().ifPresent((btnType) -> {
-                                    if (btnType.equals(ButtonType.OK)) {
-                                        if (DatabaseAbstractionLayer.get_mode() == 1) {
-                                            DatabaseAbstractionLayer.remove_image(id);
-                                            Utils.delete_image(id, file_extension_final);
-                                            reload_image_pane();
-                                        } else {
-                                            final NetworkResponse out = new NetworkResponse();
-                                            NetworkRequest.make_POST(out, "/remove_image", new Pair[] {Pair.create("id", String.valueOf(id))},
-                                                    Controller.this::reload_image_pane, ()->{}, true);
-                                        }
-                                    }
-                                });
-                            });
-
-                            offline.setSelected(DatabaseAbstractionLayer.get_img_tags(id) != null);
-                            offline.setOnAction(event14 -> {
-                                if (offline.isSelected()) {
-                                    final NetworkResponse out = new NetworkResponse();
-                                    NetworkRequest.make_POST(out, "/get_img_tags", new Pair[] { Pair.create("id", String.valueOf(id)) }, () -> {
-                                        List<String> tags = new ArrayList<>();
-                                        JSONArray arr = out.obj.getJSONArray("data");
-
-                                        for (int i = 0; i < arr.length(); i++)
-                                            tags.add(arr.getString(i));
-
-                                        Utils.copy_image(img_file[0], id);
-                                        Image img1 = new Image(img_file[0].toURI().toString());
-                                        DatabaseAbstractionLayer.upload_image(id, tags, (float) img1.getHeight()/(float) img1.getWidth());
-                                        DatabaseAbstractionLayer.update_global_tag_list(tags);
-                                    }, ()->{}, true);
-                                } else {
-                                    DatabaseAbstractionLayer.remove_image(id);
-                                    Utils.delete_image(id, ".png");
-                                }
-                            });
-
-                            if (DatabaseAbstractionLayer.get_mode() == 0 && !(!logged_in.getValue() || Controller.offline.getValue()))
-                                context_menu.getItems().add(offline);
-
-                            context_menu.getItems().add(clipboard);
-                            context_menu.getItems().add(save);
-                            context_menu.getItems().add(edit_tags);
-
-                            if (!(!logged_in.getValue() || Controller.offline.getValue()) || DatabaseAbstractionLayer.get_mode() == 1)
-                                context_menu.getItems().add(delete);
-
-                            Point mouse = java.awt.MouseInfo.getPointerInfo().getLocation();
-                            context_menu.show(stage, mouse.x, mouse.y);
+                new Thread(() -> {
+                Platform.runLater(this::show_loading);
+                try {
+                    if (DatabaseAbstractionLayer.get_mode() == 0) {
+                        if (DatabaseAbstractionLayer.get_img_tags(id) == null) {
+                            URL url = new URL(NetworkRequest.server_url + "/image/" + id);
+                            BufferedImage img = ImageIO.read(url);
+                            img_file[0] = new File(Utils.get_local_storage_dir() + "temp.png");
+                            ImageIO.write(img, "png", img_file[0]);
                         } else {
-                            //open image in default image viewer
-                            new Thread(() -> {
-                                try {
-                                    Desktop.getDesktop().open(img_file[0]);
-                                } catch (Exception e) {
-                                    Utils.handle_error(e.toString());
-                                }
-                            }).start();
+                            img_file[0] = new File(Utils.get_local_storage_dir() + "images/" + id + ".png");
                         }
-                    } catch (Exception e) {
-                        Utils.handle_error(e.toString());
                     }
-            });
+
+                    Platform.runLater(() ->{
+                       try {
+                           hide_loading();
+                           if (event.getButton() == MouseButton.SECONDARY) {
+                               //show context menu with options
+                               ContextMenu context_menu = new ContextMenu();
+                               MenuItem clipboard = new MenuItem("Copy to clipboard");
+                               MenuItem save = new MenuItem("Save as");
+                               MenuItem edit_tags = new MenuItem("Edit tags");
+                               MenuItem delete = new MenuItem("Delete");
+                               CheckMenuItem offline = new CheckMenuItem("Available offline");
+
+                               clipboard.setOnAction(event1 -> {
+                                   final Clipboard clipboard1 = Clipboard.getSystemClipboard();
+                                   final ClipboardContent content = new ClipboardContent();
+
+                                   content.putImage(new Image(img_file[0].toURI().toString()));
+                                   clipboard1.setContent(content);
+                               });
+
+                               save.setOnAction(event12 -> {
+                                   FileChooser file_chooser = new FileChooser();
+                                   FileChooser.ExtensionFilter ext_filter = new FileChooser.ExtensionFilter("Image file", "*" + file_extension_final);
+                                   file_chooser.getExtensionFilters().add(ext_filter);
+
+                                   //Show save file dialog
+                                   File file1 = file_chooser.showSaveDialog(stage);
+
+                                   if (file1 != null) {
+                                       File out = new File(file1.getAbsolutePath() + file_extension_final);
+                                       Utils.copy_image(img_file[0], out);
+                                   }
+                               });
+
+                               edit_tags.setOnAction(event2 -> {
+                                   try {
+                                       FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/edit.fxml"));
+                                       Pane pane = loader.load();
+                                       Stage stage = new Stage();
+                                       Scene scene = new Scene(pane);
+
+                                       Edit edit = loader.getController();
+                                       edit.populate(id, (DatabaseAbstractionLayer.get_mode() == 1 || Controller.offline.getValue() || !Controller.logged_in.getValue())?
+                                                       img_file[0].getAbsolutePath() : null,
+                                               scene, stage, true, true, () -> {
+                                                   refresh_auto_suggestions();
+                                                   if (filter_tags.size() > 0) {reload_image_pane();}
+                                               });
+
+                                       stage.initModality(Modality.APPLICATION_MODAL);
+                                       stage.setScene(scene);
+                                       stage.setMaximized(true);
+                                       stage.setTitle("Tag editor");
+                                       stage.setMinHeight(600);
+                                       stage.setMinWidth(600);
+                                       stage.show();
+                                   } catch (Exception e) {
+                                       Utils.handle_error(e.toString());
+                                   }
+                               });
+
+                               delete.setOnAction(event13 -> {
+                                   Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                   alert.setTitle("Delete image");
+                                   alert.setHeaderText("Are you sure you want to delete this image?");
+
+                                   alert.showAndWait().ifPresent((btnType) -> {
+                                       if (btnType.equals(ButtonType.OK)) {
+                                           if (DatabaseAbstractionLayer.get_mode() == 1) {
+                                               DatabaseAbstractionLayer.remove_image(id);
+                                               Utils.delete_image(id, file_extension_final);
+                                               mp.getChildren().remove(l);
+                                           } else {
+                                               final NetworkResponse out = new NetworkResponse();
+                                               NetworkRequest.make_POST(out, "/remove_image", new Pair[] {Pair.create("id", String.valueOf(id))},
+                                                       ()->mp.getChildren().remove(l), ()->{}, true);
+                                           }
+                                       }
+                                   });
+                               });
+
+                               offline.setSelected(DatabaseAbstractionLayer.get_img_tags(id) != null);
+                               offline.setOnAction(event14 -> {
+                                   if (offline.isSelected()) {
+                                       final NetworkResponse out = new NetworkResponse();
+                                       NetworkRequest.make_POST(out, "/get_img_tags", new Pair[] { Pair.create("id", String.valueOf(id)) }, () -> {
+                                           List<String> tags = new ArrayList<>();
+                                           JSONArray arr = out.obj.getJSONArray("data");
+
+                                           for (int i = 0; i < arr.length(); i++)
+                                               tags.add(arr.getString(i));
+
+                                           Utils.copy_image(img_file[0], id);
+                                           Image img1 = new Image(img_file[0].toURI().toString());
+                                           DatabaseAbstractionLayer.upload_image(id, tags, (float) img1.getHeight()/(float) img1.getWidth());
+                                           DatabaseAbstractionLayer.update_global_tag_list(tags);
+                                       }, ()->{}, true);
+                                   } else {
+                                       DatabaseAbstractionLayer.remove_image(id);
+                                       Utils.delete_image(id, ".png");
+                                   }
+                               });
+
+                               if (DatabaseAbstractionLayer.get_mode() == 0 && !(!logged_in.getValue() || Controller.offline.getValue()))
+                                   context_menu.getItems().add(offline);
+
+                               context_menu.getItems().add(clipboard);
+                               context_menu.getItems().add(save);
+                               context_menu.getItems().add(edit_tags);
+
+                               if (!(!logged_in.getValue() || Controller.offline.getValue()) || DatabaseAbstractionLayer.get_mode() == 1)
+                                   context_menu.getItems().add(delete);
+
+                               Point mouse = java.awt.MouseInfo.getPointerInfo().getLocation();
+                               context_menu.show(stage, mouse.x, mouse.y);
+                           } else {
+                               //open image in default image viewer
+                               new Thread(() -> {
+                                   try {
+                                       Desktop.getDesktop().open(img_file[0]);
+                                   } catch (Exception e) {
+                                       Utils.handle_error(e.toString());
+                                   }
+                               }).start();
+                           }
+                       } catch (Exception e) {
+                           Utils.handle_error(e.toString());
+                       }
+                    });
+                } catch (Exception e) {
+                    Utils.handle_error(e.toString());
+                }
+
+            }).start();});
 
 
             mp.getChildren().add(l);

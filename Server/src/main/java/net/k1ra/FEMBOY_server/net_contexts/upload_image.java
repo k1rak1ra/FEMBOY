@@ -34,8 +34,7 @@ public class upload_image extends HANDLER_BASE {
             success(p);
 
         } catch (Exception e){
-            handle_error(t, e);
-            return;
+            error(1, p);
         }
 
         done(t, p);

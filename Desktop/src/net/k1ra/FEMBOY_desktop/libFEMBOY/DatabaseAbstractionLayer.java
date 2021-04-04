@@ -728,7 +728,7 @@ public class DatabaseAbstractionLayer {
             for (String tag : tags)
                 query.append("AND tags LIKE '%").append(tag).append("%'");
 
-            PreparedStatement smt = conn.prepareStatement("SELECT * FROM images WHERE "+query);
+            PreparedStatement smt = conn.prepareStatement("SELECT * FROM images WHERE "+query+" ORDER BY id DESC");
             ResultSet rs = smt.executeQuery();
 
             List<ImageIDAspect> list = new ArrayList<ImageIDAspect>();

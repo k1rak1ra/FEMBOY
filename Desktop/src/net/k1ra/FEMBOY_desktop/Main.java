@@ -14,7 +14,7 @@ import java.nio.file.*;
 
 public class Main extends Application {
 
-    static String version = "0.1.0 - BETA";
+    static String version = "0.1.1 - BETA";
     static int feature_level = 1;
 
     @Override
