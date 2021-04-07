@@ -47,9 +47,9 @@ public class Edit {
     double scene_height = 1;
     Image img;
     List<String> tags;
-
     boolean edited = false;
     int index = 0;
+    boolean loading_tags = false;
 
     void multi(List<Integer> ids, List<String> images, Scene scene, Stage stage, Runnable on_save) {
         populate(ids.get(index), images.size() > 0? images.get(index):null, scene, stage, index == 0, index == ids.size()-1, on_save);
@@ -214,23 +214,28 @@ public class Edit {
     }
 
     void get_tags(int id){
-        if (DatabaseAbstractionLayer.get_mode() == 1 || Controller.offline.getValue() || !Controller.logged_in.getValue()) {
-            tags = DatabaseAbstractionLayer.get_img_tags(id);
-        } else {
-            tags = new ArrayList<>();
-            loading_pane.setVisible(true);
+        if (!loading_tags) {
+            loading_tags = true;
+            if (DatabaseAbstractionLayer.get_mode() == 1 || Controller.offline.getValue() || !Controller.logged_in.getValue()) {
+                tags = DatabaseAbstractionLayer.get_img_tags(id);
+                loading_tags = false;
+            } else {
+                tags = new ArrayList<>();
+                loading_pane.setVisible(true);
 
-            final NetworkResponse out = new NetworkResponse();
-            NetworkRequest.make_POST(out, "/get_img_tags", new Pair[] { Pair.create("id", String.valueOf(id)) }, () -> {
+                final NetworkResponse out = new NetworkResponse();
+                NetworkRequest.make_POST(out, "/get_img_tags", new Pair[]{Pair.create("id", String.valueOf(id))}, () -> {
 
-                JSONArray arr = out.obj.getJSONArray("data");
+                    JSONArray arr = out.obj.getJSONArray("data");
 
-                for (int i = 0; i < arr.length(); i++)
-                    tags.add(arr.getString(i));
+                    for (int i = 0; i < arr.length(); i++)
+                        tags.add(arr.getString(i));
 
-                resize_panes();
-                loading_pane.setVisible(false);
-            }, ()->{}, true);
+                    resize_panes();
+                    loading_pane.setVisible(false);
+                    loading_tags = false;
+                }, () -> { }, true);
+            }
         }
     }
 
