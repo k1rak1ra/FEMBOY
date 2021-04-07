@@ -63,7 +63,6 @@ public class Edit {
                 alert.showAndWait().ifPresent((btnType) -> {
                     if (btnType.equals(ButtonType.OK)) {
                         index++;
-                        get_tags(ids.get(index));
                         edited = false;
                         populate(ids.get(index), images.size() > 0? images.get(index):null, scene, stage, index == 0, index == ids.size() - 1, on_save);
                     }
@@ -85,7 +84,6 @@ public class Edit {
                 alert.showAndWait().ifPresent((btnType) -> {
                     if (btnType.equals(ButtonType.OK)) {
                         index--;
-                        get_tags(ids.get(index));
                         edited = false;
                         populate(ids.get(index), images.size() > 0? images.get(index):null, scene, stage, index == 0, index == ids.size() - 1, on_save);
                     }

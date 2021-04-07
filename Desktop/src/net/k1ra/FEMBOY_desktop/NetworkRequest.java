@@ -32,8 +32,8 @@ public abstract class NetworkRequest {
                     if (debug) { System.out.println(url.toString()); }
                     final HttpURLConnection client = (HttpURLConnection) url.openConnection();
 
-                    client.setReadTimeout(10000);
-                    client.setConnectTimeout(15000);
+                    client.setReadTimeout(100000);
+                    client.setConnectTimeout(150000);
                     client.setRequestMethod("POST");
                     client.setDoInput(true);
                     client.setDoOutput(true);
@@ -100,9 +100,10 @@ public abstract class NetworkRequest {
                     if (done_loading != null)
                         done_loading.run();
 
-                    if (p.equals("/info") || p.equals("/do_setup") || p.equals("/login"))
+                    if (p.equals("/info") || p.equals("/do_setup") || p.equals("/login") || p.equals("/upload_image")) {
+                        out.error = -1;
                         Platform.runLater(onError);
-                    else
+                    } else
                         Platform.runLater(no_internet);
                 }
             }

@@ -2,8 +2,8 @@ package net.k1ra.FEMBOY_desktop;
 
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -99,6 +100,10 @@ public class Controller implements Initializable {
     boolean showing_no_internet_dialog = false;
     int status = 0;
     List<Image> images = new ArrayList<>();
+    int mp_index = 0;
+    List<Integer> mp_ids = new ArrayList<>();
+    List<Float> mp_aspects = new ArrayList<>();
+    Boolean sp_bottom_flag = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -232,22 +237,36 @@ public class Controller implements Initializable {
                                 NetworkRequest.done_loading = null;
                                 Platform.runLater(() -> upload_progress.setProgress(0));
 
-                                for (int i = 0; i < files.size(); i++) {
+                                for (final IntegerProperty i = new SimpleIntegerProperty(0); i.get() < files.size(); i.set(i.get()+1)) {
                                     final NetworkResponse out = new NetworkResponse();
-                                    final double i_f = i;
                                     upload_tread_done = false;
 
-                                    Image img = new Image(files.get(i).toURI().toString());
+                                    Image img = new Image(files.get(i.get()).toURI().toString());
                                     NetworkRequest.make_POST(out, "/upload_image", new Pair[] {
-                                            Pair.create("image", Utils.base64_encode(files.get(i))),
+                                            Pair.create("image", Utils.base64_encode(files.get(i.get()))),
                                             Pair.create("aspect", String.valueOf(img.getHeight()/img.getWidth()))}, () ->{
-                                        upload_progress.setProgress(i_f/(double)files.size());
+                                        upload_progress.setProgress(i.get()/(double)files.size());
                                         ids.add(out.obj.getInt("id"));
                                         upload_tread_done = true;
-                                    }, ()-> upload_tread_done = true, true);
+                                    }, ()-> {
+                                        if (out.error == -1) {
+                                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                                            alert.setTitle("Error");
+                                            alert.setHeaderText("Server connection issue.");
+                                            alert.setContentText("Click OK to try resuming the image upload, next to skip the current image, or just cancel.");
+                                            alert.getButtonTypes().addAll(ButtonType.CANCEL, ButtonType.NEXT);
+                                            Optional<ButtonType> result = alert.showAndWait();
+                                            if (result.get() == ButtonType.OK)
+                                                i.set(i.get() - 1);
+                                            else if (result.get() == ButtonType.CANCEL)
+                                                i.set(files.size());
+                                        }
+                                        upload_tread_done = true;
+                                    }, true);
 
                                     //wait until upload is done, do one by one
-                                    while (!upload_tread_done) {}
+                                    while (!upload_tread_done)
+                                        Thread.onSpinWait();
                                 }
 
                                 Platform.runLater(() -> upload_progress.setProgress(0));
@@ -693,6 +712,15 @@ public class Controller implements Initializable {
             mp.getChildren().clear();
             inhibit_mp_reload = true;
 
+            sp.onScrollProperty().unbind();
+            sp.setOnScroll(scrollEvent -> {
+                if (sp.getVvalue() == 1.0 && !sp_bottom_flag) {
+                    Platform.runLater(this::show_next_100);
+                    sp_bottom_flag = true;
+                } else if (sp.getVvalue() < 1.0)
+                    sp_bottom_flag = false;
+            });
+
             for (Image i : images)
                 i.cancel();
 
@@ -702,9 +730,16 @@ public class Controller implements Initializable {
                 List<DatabaseAbstractionLayer.ImageIDAspect> items = DatabaseAbstractionLayer.get_images_with_tags(filter_tags);
                 mp.setLimitRow(items.size() + 10);
                 set_result_count(items.size());
-                for (final DatabaseAbstractionLayer.ImageIDAspect item : items)
-                    put_image_into_pane(item.id, item.aspect);
+                mp_index = 0;
+                mp_ids.clear();
+                mp_aspects.clear();
 
+                for (final DatabaseAbstractionLayer.ImageIDAspect item : items) {
+                    mp_ids.add(item.id);
+                    mp_aspects.add(item.aspect);
+                }
+
+                show_next_100();
                 pane_empty_msg();
             } else {
                 final JSONArray arr = new JSONArray();
@@ -717,13 +752,27 @@ public class Controller implements Initializable {
                     JSONArray aspects = out.obj.getJSONObject("data").getJSONArray("aspects");
                     mp.setLimitRow(ids.length() + 10);
                     set_result_count(ids.length());
-                    for (int i = 0; i < ids.length(); i++)
-                        put_image_into_pane(ids.getInt(i), aspects.getBigDecimal(i).floatValue());
+                    mp_index = 0;
+                    mp_ids.clear();
+                    mp_aspects.clear();
 
+                    for (int i = 0; i < ids.length(); i++) {
+                        mp_ids.add(ids.getInt(i));
+                        mp_aspects.add(aspects.getBigDecimal(i).floatValue());
+                    }
+
+                    show_next_100();
                     pane_empty_msg();
-                }, () -> {
-                }, true);
+                }, () -> { }, true);
             }
+        }
+    }
+
+    void show_next_100(){
+        final int index = mp_index;
+        for (int i = index; i < Math.min(mp_ids.size(), index + 100); i++) {
+            put_image_into_pane(mp_ids.get(i), mp_aspects.get(i));
+            mp_index++;
         }
     }
 
@@ -765,8 +814,8 @@ public class Controller implements Initializable {
         final String file_extension_final = file_extension;
 
         if (file_extension != null || DatabaseAbstractionLayer.get_mode() == 0) {
-            Image img_i = null;
-            File file = null;
+            final Image[] img = {null};
+            final File[] img_file = {null};
             ImageView image = new ImageView();
             image.setFitWidth(185);
             image.setFitHeight(185*aspect);
@@ -774,18 +823,17 @@ public class Controller implements Initializable {
 
             if (DatabaseAbstractionLayer.get_mode() == 1 || !logged_in.getValue() || offline.getValue()) {
                 file_path = Utils.get_local_storage_dir() + "images/" + id + file_extension;
-
-                //load image
-                file = new File(file_path);
-                img_i = new Image(file.toURI().toString(), 185, 185*aspect, true, false, true);
-            } else {
-                img_i = new Image(NetworkRequest.server_url+"/image/"+id, 185, 185*aspect, true, false, true);
+                img_file[0] = new File(file_path);
             }
 
-            images.add(img_i);
-            final Image img_f = img_i;
-            final File[] img_file = {file};
-            image.setImage(img_f);
+            if (DatabaseAbstractionLayer.get_mode() == 1 || !logged_in.getValue() || offline.getValue())
+                img[0] = new Image(img_file[0].toURI().toString(), 185, 185*aspect, true, false, true);
+            else
+                img[0] = new Image(NetworkRequest.server_url+"/image/"+id, 185, 185*aspect, true, false, true);
+
+            images.add(img[0]);
+            image.setImage(img[0]);
+
 
             final Label l = new Label(null, image);
             l.setOnMouseClicked(event -> {
@@ -795,9 +843,9 @@ public class Controller implements Initializable {
                     if (DatabaseAbstractionLayer.get_mode() == 0) {
                         if (DatabaseAbstractionLayer.get_img_tags(id) == null) {
                             URL url = new URL(NetworkRequest.server_url + "/image/" + id);
-                            BufferedImage img = ImageIO.read(url);
+                            BufferedImage buf_img = ImageIO.read(url);
                             img_file[0] = new File(Utils.get_local_storage_dir() + "temp.png");
-                            ImageIO.write(img, "png", img_file[0]);
+                            ImageIO.write(buf_img, "png", img_file[0]);
                         } else {
                             img_file[0] = new File(Utils.get_local_storage_dir() + "images/" + id + ".png");
                         }
