@@ -58,3 +58,6 @@ Server (Version 0.1.1 available):
 # Development environment
 For server/desktop client: ItelliJ IDEA + Maven for dependencies
 Place DD-model.zip in DD_data folder of client and server, alongside the DD-characters.txt and DD-tags.txt that are already there. The model file is too big for git.
+
+# License
+GPLv3

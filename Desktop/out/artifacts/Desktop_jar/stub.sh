@@ -5,6 +5,6 @@ java=java
 if test -n "$JAVA_HOME"; then
     java="$JAVA_HOME/bin/java"
 fi
-java_args=-Xmx1g
+java_args=-Xmx2g
 exec "$java" $java_args -jar $MYSELF "$@"
 exit 1 
