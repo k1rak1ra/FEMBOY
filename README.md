@@ -36,8 +36,10 @@ Server (Version 0.1.1 available):
 - Requires a mySQL server
 - Has user accounts that clients need to use to login
 - LDAP support
-- Server API documentation coming soon so you can make your own client
 - HTTP on port 5000. Designed to run on LAN or behind a reverse proxy
+
+# Server API documentation
+See Wiki
 
 # Contributing
 - This is a first release and probably isn't perfect. If you have a problem, submit an issue. Be sure to include the error message (if any)
