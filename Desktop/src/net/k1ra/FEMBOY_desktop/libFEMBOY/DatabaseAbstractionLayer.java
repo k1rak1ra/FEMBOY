@@ -15,7 +15,7 @@ public class DatabaseAbstractionLayer {
         try {
             PreparedStatement smt = conn.prepareStatement("CREATE TABLE tags (\n" +
                     "\tid INTEGER PRIMARY KEY,\n" +
-                    "\ttags TEXT NOT NULL,\n" +
+                    "\ttags LONGTEXT NOT NULL,\n" +
                     "\tlatest_id INTEGER\n" +
                     ");");
             smt.executeUpdate();

@@ -1,6 +1,6 @@
 # F.E.M.B.O.Y.
 Finds Every Match Beyond Ordinary Yearning  
-Because it finds all the tags, not just the ones you're looking for  
+Because it finds all the tags, not just the ones you're looking for (and hopefully no false positives!)
 A comprehensive image management, tagging, and syncing system, all automated  
 
 # What is it?
@@ -15,14 +15,13 @@ https://github.com/KichangKim/DeepDanbooru
 
 Inspired by Hydrus (https://github.com/hydrusnetwork/hydrus), and intending to be a nicer-looking and easier to use version of it with far better server/sync features and a modern neural network based automated tagging system.
 
-Mobile client (INCOMPLETE): (iOS, Android) 
-- Most likely made using Flutter
+Mobile client (WIP - working source available): (iOS, Android) 
+- Made using Flutter
 - Runs either in local mode or in server client mode
 - In local mode, DD instance is run locally and all images and tag data are saved locally
 - In server client mode, DD instance is run on server and client can select some images to be saved locally
-- Can edit/delete tags of images
-- Can upload/delete images
-- In server client mode, upload image to server and server returns tags
+- In server client mode, the server performs the computationally/RAM-intensive TensorFlow image tagging operations
+- Will have feature parity with desktop client
 
 Desktop client (Version 0.1.2 available): (Windows, Linux, MacOS, BSD?)
 - Requires Java 11+ for Linux or ONLY Java 1.8 for Windows and JAR
@@ -31,7 +30,7 @@ Desktop client (Version 0.1.2 available): (Windows, Linux, MacOS, BSD?)
 - In server client mode, DD instance is run on server and client can select some images to be saved locally
 - In server client mode, the server performs the computationally/RAM-intensive TensorFlow image tagging operations
 
-Server (Version 0.1.1 available): 
+Server (Version 0.1.2 available): 
 - Requires Java 11+ on all platforms
 - Requires a mySQL server
 - Has user accounts that clients need to use to login
@@ -60,6 +59,7 @@ See Wiki
 # Development environment
 For server/desktop client: ItelliJ IDEA + Maven for dependencies
 Place DD-model.zip in DD_data folder of client and server, alongside the DD-characters.txt and DD-tags.txt that are already there. The model file is too big for git.
+Place model.tflite in assets folder of mobile version, alongside the DD-characters.txt and DD-tags.txt that are already there. The model file is too big for git.
 
 # License
 GPLv3

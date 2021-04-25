@@ -24,12 +24,11 @@ public class create_user  extends HANDLER_BASE {
             String uid = DatabaseAbstractionLayer.create_user(p.params.get("name"), p.params.get("password"), Integer.parseInt(p.params.get("admin")));
 
             if (uid != null) {
+                success(p);
                 p.out.put("data", uid);
             } else {
                 error(1, p);
             }
-
-            success(p);
 
         } catch (Exception e){
             handle_error(t, e);
