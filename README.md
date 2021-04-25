@@ -58,7 +58,11 @@ See Wiki
 
 # Development environment
 For server/desktop client: ItelliJ IDEA + Maven for dependencies
+
+
 Place DD-model.zip in DD_data folder of client and server, alongside the DD-characters.txt and DD-tags.txt that are already there. The model file is too big for git.
+
+
 Place model.tflite in assets folder of mobile version, alongside the DD-characters.txt and DD-tags.txt that are already there. The model file is too big for git.
 
 # License
