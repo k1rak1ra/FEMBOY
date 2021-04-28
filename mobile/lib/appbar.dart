@@ -1,6 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+Widget selectModeBar(
+    String title, Function closeAll, Function delete, Function save) {
+  return AppBar(
+    backgroundColor: Color(0xff202225),
+    brightness: Brightness.dark,
+    title: Text(title),
+    leading: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: IconButton(
+        icon: Icon(Icons.close),
+        onPressed: () => closeAll(),
+      ),
+    ),
+    actions: <Widget>[
+      IconButton(
+        icon: Icon(Icons.save),
+        onPressed: () => save(),
+      ),
+      IconButton(
+        icon: Icon(Icons.delete),
+        onPressed: () => delete(),
+      ),
+    ],
+  );
+}
+
 Widget FEMBOYBar(String title, Function refresh, Function search,
     Function uploadFile, Function settings) {
   return AppBar(

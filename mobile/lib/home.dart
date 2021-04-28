@@ -17,8 +17,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'setup.dart';
 import 'image_viewer.dart';
 import 'package:path/path.dart';
+import 'package:mime/mime.dart';
+import 'package:http/http.dart' as http;
 
 List<int> recievedImages = List.empty();
+List<int> selectedImages = List.empty(growable: true);
+List<int> savedImages = List.empty();
 List<String> allTags = List.empty();
 final List<TagListChip> filterTags = List.empty(growable: true);
 bool gettingImages = false;
@@ -75,11 +79,13 @@ class HomeState extends State<Home> {
             recievedImagesNew.add(id);
           }
 
-          makeNetworkRequest({}, "/get_all_tags", (json) {
+          makeNetworkRequest({}, "/get_all_tags", (json) async {
             List<dynamic> tags = json['data'] as List<dynamic>;
             for (String tag in tags) {
               allTagsNew.add(tag);
             }
+
+            savedImages = await getImagesWithTags(List.empty());
 
             setState(
               () {
@@ -411,6 +417,75 @@ class HomeState extends State<Home> {
     }
   }
 
+  Widget gridImage(int id, BuildContext context, int numBoxes, int shrink) {
+    return localMode
+        ? Image.file(getLocalImage(id),
+            height: (MediaQuery.of(context).size.width / numBoxes) - 4 - shrink,
+            width: (MediaQuery.of(context).size.width / numBoxes) - 4 - shrink,
+            fit: BoxFit.cover)
+        : Image(
+            image: NetworkImage(server + "/image/" + id.toString()),
+            height: (MediaQuery.of(context).size.width / numBoxes) - 4 - shrink,
+            width: (MediaQuery.of(context).size.width / numBoxes) - 4 - shrink,
+            fit: BoxFit.cover);
+  }
+
+  void downloadLoop(
+      Function update, BuildContext context, BuildContext context2) async {
+    bool inUpload = false;
+    while (progress < selectedImages.length) {
+      if (!inUpload) {
+        inUpload = true;
+        try {
+          var response = await http.get(
+              server + "/image/" + selectedImages[progress.round()].toString());
+          Directory documentDirectory =
+              await getApplicationDocumentsDirectory();
+          String ext = ".jpg";
+          if (lookupMimeType(join(documentDirectory.path, ''), headerBytes: [
+                response.bodyBytes.elementAt(0),
+                response.bodyBytes.elementAt(1)
+              ]) ==
+              null) {
+            ext = ".png";
+          }
+
+          await makeNetworkRequest(
+              {"id": selectedImages[progress.round()].toString()},
+              "/get_img_tags", (json) async {
+            List<dynamic> tagsJson = json['data'] as List<dynamic>;
+            List<String> tags = List.empty(growable: true);
+            for (String tag in tagsJson) {
+              tags.add(tag);
+            }
+
+            File file = new File(join(documentDirectory.path,
+                selectedImages[progress.round()].toString() + ext));
+            await file.writeAsBytes(response.bodyBytes);
+            await uploadImage(tags, selectedImages[progress.round()]);
+            await updateGlobalTagList(tags);
+            progress++;
+
+            inUpload = false;
+            update();
+            if (progress == selectedImages.length) {
+              closeModel();
+              Navigator.pop(context2);
+              savedImages = await getImagesWithTags(List.empty());
+              selectedImages.clear();
+              setState(() {});
+            }
+          }, null, context);
+        } catch (e) {
+          print(e);
+          Navigator.pop(context2);
+          progress = selectedImages.length / 1.0;
+          inUpload = false;
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!launchTaskRan) {
@@ -422,15 +497,77 @@ class HomeState extends State<Home> {
 
     return Scaffold(
         backgroundColor: Color(0xff36393f),
-        appBar: FEMBOYBar(
-            recievedImages.length.toString() + " results",
-            () => getImagesAndTags(context),
-            () => search(context),
-            () => uploadFile(context),
-            () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Settings()),
-                )),
+        appBar: (selectedImages.length > 0)
+            ? selectModeBar(selectedImages.length.toString() + " selected", () {
+                selectedImages.clear();
+                setState(() {});
+              }, () {
+                //delet
+              }, () {
+                for (int i in selectedImages) {
+                  if (savedImages.contains(i)) {
+                    selectedImages.remove(i);
+                  }
+                }
+
+                if (selectedImages.length == 0) {
+                  setState(() {});
+                  return;
+                }
+
+                bool downloadLoopLaunched = false;
+                progress = 0;
+
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return StatefulBuilder(builder: (context2, setState) {
+                        if (!downloadLoopLaunched) {
+                          downloadLoopLaunched = true;
+                          downloadLoop(
+                              () => setState(() {}), context, context2);
+                        }
+                        return WillPopScope(
+                            child: AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              backgroundColor: Color(0xff2f3136),
+                              content: Container(
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  children: <Widget>[
+                                    Text(
+                                      "Please wait, downloading...",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 20.0, color: Colors.white),
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    LinearProgressIndicator(
+                                      value: progress / selectedImages.length,
+                                      semanticsLabel: 'Progress indicator',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            onWillPop: () => Future.value(false));
+                      });
+                    });
+              })
+            : FEMBOYBar(
+                recievedImages.length.toString() + " results",
+                () => getImagesAndTags(context),
+                () => search(context),
+                () => uploadFile(context),
+                () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Settings()),
+                    )),
         body: (recievedImages.length == 0 && filterTags.length == 0)
             ? Text(
                 "\nYour image library is empty, add something to it!",
@@ -443,44 +580,105 @@ class HomeState extends State<Home> {
                   return Center(
                       child: Padding(
                           padding: const EdgeInsets.all(2),
-                          child: OpenContainer(
-                            transitionType: ContainerTransitionType.fadeThrough,
-                            closedColor: Color(0xff40444b),
-                            closedElevation: 0.0,
-                            openElevation: 4.0,
-                            transitionDuration: Duration(milliseconds: 200),
-                            openBuilder:
-                                (BuildContext context, VoidCallback _) =>
-                                    ImageViewer(index, () => setState(() {})),
-                            closedBuilder:
-                                (BuildContext _, VoidCallback openContainer) {
-                              return localMode
-                                  ? Image.file(
-                                      getLocalImage(recievedImages[index]),
-                                      height:
-                                          (MediaQuery.of(context).size.width /
-                                                  numBoxes) -
-                                              4,
-                                      width:
-                                          (MediaQuery.of(context).size.width /
-                                                  numBoxes) -
-                                              4,
-                                      fit: BoxFit.cover)
-                                  : Image(
-                                      image: NetworkImage(server +
-                                          "/image/" +
-                                          recievedImages[index].toString()),
-                                      height:
-                                          (MediaQuery.of(context).size.width /
-                                                  numBoxes) -
-                                              4,
-                                      width:
-                                          (MediaQuery.of(context).size.width /
-                                                  numBoxes) -
-                                              4,
-                                      fit: BoxFit.cover);
-                            },
-                          )));
+                          child: GestureDetector(
+                              onLongPress: () {
+                                vibrateDevice();
+                                if (!selectedImages
+                                    .contains(recievedImages[index])) {
+                                  selectedImages.add(recievedImages[index]);
+                                  setState(() {});
+                                }
+                              },
+                              child: Stack(children: <Widget>[
+                                Align(
+                                    alignment: Alignment.center,
+                                    child: OpenContainer(
+                                      transitionType:
+                                          ContainerTransitionType.fadeThrough,
+                                      closedColor: Color(0xff40444b),
+                                      closedElevation: 0.0,
+                                      openElevation: 4.0,
+                                      transitionDuration:
+                                          Duration(milliseconds: 200),
+                                      openBuilder: (BuildContext context,
+                                              VoidCallback _) =>
+                                          ImageViewer(
+                                              index, () => setState(() {})),
+                                      closedBuilder: (BuildContext _,
+                                          VoidCallback openContainer) {
+                                        return gridImage(
+                                            recievedImages[index],
+                                            context,
+                                            numBoxes,
+                                            (selectedImages.contains(
+                                                    recievedImages[index])
+                                                ? 20
+                                                : 1));
+                                      },
+                                    )),
+                                selectedImages.length > 0
+                                    ? Container(
+                                        width:
+                                            (MediaQuery.of(context).size.width /
+                                                    numBoxes) -
+                                                4,
+                                        height:
+                                            (MediaQuery.of(context).size.width /
+                                                    numBoxes) -
+                                                4,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            if (!selectedImages.contains(
+                                                recievedImages[index])) {
+                                              selectedImages
+                                                  .add(recievedImages[index]);
+                                            } else {
+                                              selectedImages.remove(
+                                                  recievedImages[index]);
+                                            }
+                                            setState(() {});
+                                          },
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 0,
+                                        width: 0,
+                                      ),
+                                selectedImages.contains(recievedImages[index])
+                                    ? Align(
+                                        alignment: Alignment.topLeft,
+                                        child: ClipOval(
+                                          child: Material(
+                                            color: Colors.white,
+                                            child: Icon(Icons.check),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 0,
+                                        width: 0,
+                                      ),
+                                savedImages.contains(recievedImages[index])
+                                    ? Align(
+                                        alignment: Alignment.topRight,
+                                        child: Container(
+                                          padding: EdgeInsets.all(1),
+                                          child: ClipOval(
+                                            child: Material(
+                                              color: Colors.white,
+                                              child: Container(
+                                                child: Icon(Icons.save),
+                                                padding: EdgeInsets.all(1),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 0,
+                                        width: 0,
+                                      )
+                              ]))));
                 }),
               ));
   }

@@ -83,11 +83,11 @@ Future<bool> makeNetworkRequest(
         print(response.body);
         Map<String, dynamic> json = jsonDecode(response.body);
         if (json['success'] as int == 1) {
-          onSuccess(json);
+          await onSuccess(json);
         } else if (json['error'] as int == 0) {
           //logout
         } else if (onFail != null) {
-          onFail(json);
+          await onFail(json);
         }
         return;
       }
@@ -96,7 +96,7 @@ Future<bool> makeNetworkRequest(
     }
 
     if (url == "/info" || url == "/upload_image") {
-      onFail(null);
+      await onFail(null);
     } else {
       hideLoading();
       errorDialog(context,

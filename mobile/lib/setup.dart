@@ -15,9 +15,9 @@ final controllerSqlUser = TextEditingController();
 final controllerSqlPassword = TextEditingController();
 final controllerRootPassword1 = TextEditingController();
 final controllerRootPassword2 = TextEditingController();
-final dialogStack = Stack<BuildContext>();
+final dialogStack = ObjectStack<BuildContext>();
 
-class Stack<T> {
+class ObjectStack<T> {
   final _stack = Queue<T>();
 
   void push(T element) {

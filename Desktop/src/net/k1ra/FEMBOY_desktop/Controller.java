@@ -91,6 +91,7 @@ public class Controller implements Initializable {
     @FXML Text status_line;
     @FXML Button btn_status_action;
     @FXML Text result_num_line;
+    @FXML Button btn_booru;
 
     volatile boolean upload_tread_done = false;
     volatile boolean inhibit_mp_reload = false;
@@ -133,6 +134,7 @@ public class Controller implements Initializable {
         btn_setup_done.setStyle("-fx-background-color: #40444b");
         btn_login.setStyle("-fx-background-color: #40444b");
         btn_status_action.setStyle("-fx-background-color: #40444b");
+        btn_booru.setStyle("-fx-background-color: #40444b");
 
         //scroll pane scrollbar settings
         sp.getStylesheets().add(this.getClass().getResource("CSS/scroll_main.css").toExternalForm());
@@ -171,6 +173,27 @@ public class Controller implements Initializable {
                 autocomplete.hide();
             else
                 autocomplete.show(search_field);
+        });
+
+        //booru snatch button
+        btn_booru.setOnMouseClicked(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/booru.fxml"));
+                Pane pane = loader.load();
+                Settings settings = loader.getController();
+                Scene scene = new Scene(pane);
+                settings.scene = scene;
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setTitle("Booru browser/snatcher");
+                stage.setMinHeight(700);
+                stage.setMinWidth(700);
+                stage.setScene(scene);
+                stage.show();
+                settings.init();
+            } catch (Exception e) {
+                Utils.handle_error(e.toString());
+            }
         });
 
         //settings button

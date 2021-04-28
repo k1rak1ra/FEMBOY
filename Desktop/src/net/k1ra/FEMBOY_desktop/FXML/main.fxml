@@ -24,6 +24,7 @@
       </ScrollPane>
       <ProgressBar fx:id="upload_progress" maxHeight="2.0" maxWidth="220.0" minHeight="2.0" minWidth="220.0" prefHeight="2.0" prefWidth="220.0" progress="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="17.0" />
       <Button fx:id="btn_upload" layoutX="45.0" layoutY="14.0" maxWidth="220.0" minWidth="220.0" mnemonicParsing="false" prefWidth="220.0" text="Upload image" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="btn_booru" layoutX="55.0" layoutY="24.0" maxWidth="220.0" minWidth="220.0" mnemonicParsing="false" prefWidth="220.0" text="Booru browser/snatcher (WIP)" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="55.0" />
       <Button fx:id="btn_settings" layoutX="46.0" layoutY="351.0" maxWidth="220.0" minWidth="220.0" mnemonicParsing="false" prefWidth="220.0" text="Settings" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
       <HBox alignment="CENTER" prefWidth="200.0" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
          <children>
@@ -34,7 +35,7 @@
             </Text>
          </children>
       </HBox>
-      <AnchorPane fx:id="status_pane" prefHeight="110.0" prefWidth="220.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="65.0">
+      <AnchorPane fx:id="status_pane" prefHeight="110.0" prefWidth="220.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="100.0">
          <children>
             <Text fill="WHITE" layoutX="78.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Status:" textAlignment="CENTER" AnchorPane.leftAnchor="78.0" AnchorPane.rightAnchor="78.578125" AnchorPane.topAnchor="7.0">
                <font>
@@ -58,7 +59,7 @@
             </HBox>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="ap_search" layoutX="30.0" layoutY="100.0" maxWidth="220.0" minWidth="220.0" prefWidth="220.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="190.0">
+      <AnchorPane fx:id="ap_search" layoutX="30.0" layoutY="100.0" maxWidth="220.0" minWidth="220.0" prefWidth="220.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="225.0">
          <children>
             <Text fill="WHITE" layoutX="35.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search with tags" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="34.2412109375" AnchorPane.topAnchor="7.0">
                <font>
