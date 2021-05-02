@@ -81,7 +81,7 @@ class SettingsState extends State<Settings> {
   }
 
   List<Widget> getTabTitles() {
-    if (session.admin && !localMode) {
+    if (session.admin && !localMode && !offline) {
       return <Widget>[
         Tab(
           text: "About",
@@ -991,7 +991,7 @@ class SettingsState extends State<Settings> {
   }
 
   List<Widget> getTabs(BuildContext context) {
-    if (session.admin && !localMode) {
+    if (session.admin && !localMode && !offline) {
       return <Widget>[
         about(),
         Center(
@@ -1067,10 +1067,12 @@ class SettingsState extends State<Settings> {
   }
 
   List<Widget> localOrServerInfo() {
-    if (localMode) {
+    if (localMode || offline) {
       return <Widget>[
         Text(
-          "Running in local mode",
+          offline
+              ? (loggedOut ? "Logged out" : "Offline")
+              : "Running in local mode",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20.0, color: Colors.white),
         )
@@ -1100,7 +1102,13 @@ class SettingsState extends State<Settings> {
           ),
           child: Container(child: Text("Log out")),
           onPressed: () {
-            Navigator.pop(context); //TODO make this work with loggedout logic
+            showLoading(context);
+            makeNetworkRequest({"all": "0"}, "/log_out", (json) {
+              offlineListener(true);
+              loggedOut = true;
+              Navigator.pop(context);
+              setState(() {});
+            }, null, context);
           },
         )
       ];
@@ -1191,6 +1199,11 @@ class SettingsState extends State<Settings> {
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 15.0, color: Colors.white),
               ),
+              Text(
+                "- flutter_launcher_icons",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 15.0, color: Colors.white),
+              ),
             ]),
       ),
     );
@@ -1198,14 +1211,14 @@ class SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    if (!launchTaskRan && !localMode) {
+    if (!launchTaskRan && !localMode && !offline) {
       launchTaskRan = true;
       Future.delayed(Duration.zero, () => refreshInfo(context));
     }
 
     return DefaultTabController(
       initialIndex: 0,
-      length: session.admin ? 4 : 2,
+      length: (session.admin && !offline) ? 4 : 2,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xff202225),

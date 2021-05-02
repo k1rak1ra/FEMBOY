@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:FEMBOY/setup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +12,11 @@ BuildContext loadingContext;
 SessionInfo session;
 bool localMode;
 Directory documentDirectory;
+bool offline = false;
+bool offlineRetry = false;
+bool loggedOut = false;
+Function(bool) offlineListener;
+Function mainSetState;
 
 class SessionInfo {
   String token = "";
@@ -76,16 +82,24 @@ Future<bool> makeNetworkRequest(
       Map<String, String> body = {};
       body.addAll(session.get());
       body.addAll(params);
-      final response = await http.post(server + url,
+      final response = await http.post(Uri.parse(server + url),
           headers: headers, body: body, encoding: Encoding.getByName("utf-8"));
 
       if (response.statusCode == 200) {
         print(response.body);
         Map<String, dynamic> json = jsonDecode(response.body);
         if (json['success'] as int == 1) {
+          if (offlineListener != null) {
+            offlineListener(false);
+          }
           await onSuccess(json);
         } else if (json['error'] as int == 0) {
-          //logout
+          hideLoading();
+          if (offlineListener != null) {
+            offlineListener(true);
+          }
+          loggedOut = true;
+          login(context, mainSetState);
         } else if (onFail != null) {
           await onFail(json);
         }
@@ -98,6 +112,9 @@ Future<bool> makeNetworkRequest(
     if (url == "/info" || url == "/upload_image") {
       await onFail(null);
     } else {
+      if (offlineListener != null) {
+        offlineListener(true);
+      }
       hideLoading();
       errorDialog(context,
           "Could not connect to the server. Check your internet connection and the server.");

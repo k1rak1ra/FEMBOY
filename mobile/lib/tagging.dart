@@ -3,18 +3,33 @@ import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 import 'package:tflite/tflite.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:path/path.dart';
+import 'network_requests.dart';
 
-Future<String> loadCharacters() async {
-  return await rootBundle.loadString('assets/DD-characters.txt');
+List<String> characters = List.empty(growable: true);
+
+Future<bool> loadCharacters() async {
+  characters.clear();
+  String text = await rootBundle.loadString('assets/DD-characters.txt');
+  List<String> list = text.split("\n");
+  for (String s in list) {
+    if (s.length > 2) {
+      characters.add(s.substring(0, s.length - 1));
+    }
+  }
+
+  print(characters);
+  print(characters.length);
+  return true;
 }
 
 Future<String> loadModel() async {
   return await Tflite.loadModel(
-      model: "assets/model.tflite",
-      labels: "assets/DD-tags.txt",
+      model: join(documentDirectory.path, "model.tflite").toString(),
+      labels: join(documentDirectory.path, "DD-tags.txt").toString(),
       numThreads: 1, // defaults to 1
       isAsset:
-          true, // defaults to true, set to false to load resources outside assets
+          false, // defaults to true, set to false to load resources outside assets
       useGpuDelegate: true // defaults to false, set to true to use GPU delegate
       );
 }

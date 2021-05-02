@@ -98,9 +98,9 @@ Future<List<String>> getImgTags(int id) async {
 }
 
 Future<bool> updateImgTags(List<String> tags, int id) async {
-  await updateGlobalTagList(tags);
   await db.rawUpdate('UPDATE images SET tags = ?  WHERE id = ?;',
       [stringListToJSON(tags), id.toString()]);
+  await updateGlobalTagList(tags);
   return true;
 }
 

@@ -14,6 +14,7 @@ import 'package:path_provider/path_provider.dart';
 
 final controllerTagEdit = TextEditingController();
 List<TagListChip> tagEditorList = List.empty(growable: true);
+ScrollPhysics pageViewPhysics = ScrollPhysics();
 
 class ImageViewer extends StatefulWidget {
   final int index;
@@ -41,7 +42,16 @@ class ImageViewerState extends State<ImageViewer> {
           ),
         ),
         minScale: PhotoViewComputedScale.contained * 1.0,
-        imageProvider: localMode
+        scaleStateChangedCallback: (scale) {
+          print(scale);
+          if (scale != PhotoViewScaleState.initial) {
+            pageViewPhysics = NeverScrollableScrollPhysics();
+          } else {
+            pageViewPhysics = ScrollPhysics();
+          }
+          setState(() {});
+        },
+        imageProvider: localMode || offline
             ? Image.file(getLocalImage(image)).image
             : NetworkImage(server + "/image/" + image.toString()),
       ));
@@ -52,16 +62,18 @@ class ImageViewerState extends State<ImageViewer> {
   void editDialog(Map<String, dynamic> json, BuildContext context) async {
     bool modified = false;
 
-    List<dynamic> tags = localMode
+    List<dynamic> tags = localMode || offline
         ? await getImgTags(recievedImages[index])
         : json['data'] as List<dynamic>;
 
     tagEditorList.clear();
     for (String tag in tags) {
       tagEditorList.add(TagListChip(tag, (item, setState) {
-        modified = true;
-        tagEditorList.remove(item);
-        setState();
+        if (!offline) {
+          modified = true;
+          tagEditorList.remove(item);
+          setState();
+        }
       }, () => setState(() {})));
     }
 
@@ -84,90 +96,126 @@ class ImageViewerState extends State<ImageViewer> {
                       child: ListView(
                         shrinkWrap: true,
                         children: <Widget>[
-                          TextField(
-                              style: TextStyle(
-                                  fontSize: 16.0, color: Colors.white),
-                              minLines: 1,
-                              maxLines: 1,
-                              controller: controllerTagEdit,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(0.0),
-                                  isDense: true,
-                                  hintStyle: TextStyle(
-                                      fontSize: 16.0, color: Colors.white60),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
+                          offline
+                              ? Container(
+                                  width: 0,
+                                  height: 0,
+                                )
+                              : TextField(
+                                  style: TextStyle(
+                                      fontSize: 16.0, color: Colors.white),
+                                  minLines: 1,
+                                  maxLines: 1,
+                                  controller: controllerTagEdit,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(0.0),
+                                      isDense: true,
+                                      hintStyle: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.white60),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                      ),
+                                      hintText: 'Enter a tag')),
+                          offline
+                              ? Container(
+                                  width: 0,
+                                  height: 0,
+                                )
+                              : SizedBox(
+                                  height: 5,
+                                ),
+                          offline
+                              ? Container(
+                                  width: 0,
+                                  height: 0,
+                                )
+                              : ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty
+                                        .resolveWith<Color>(
+                                      (Set<MaterialState> states) {
+                                        return Color(0xff40444b);
+                                      },
+                                    ),
                                   ),
-                                  hintText: 'Enter a tag')),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  return Color(0xff40444b);
-                                },
-                              ),
-                            ),
-                            child: Container(child: Text("Add")),
-                            onPressed: () {
-                              if (!tagEditorList
-                                  .map((e) => e.tag)
-                                  .toList()
-                                  .contains(controllerTagEdit.text)) {
-                                modified = true;
-                                tagEditorList.add(TagListChip(
-                                    controllerTagEdit.text, (item, setState) {
-                                  tagEditorList.remove(item);
-                                  setState();
-                                }, () => setState(() {})));
-                                setState(() {});
-                              }
-                              controllerTagEdit.clear();
-                            },
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
+                                  child: Container(child: Text("Add")),
+                                  onPressed: () {
+                                    if (!tagEditorList
+                                        .map((e) => e.tag)
+                                        .toList()
+                                        .contains(controllerTagEdit.text)) {
+                                      modified = true;
+                                      tagEditorList.add(
+                                          TagListChip(controllerTagEdit.text,
+                                              (item, setState) {
+                                        tagEditorList.remove(item);
+                                        setState();
+                                      }, () => setState(() {})));
+                                      setState(() {});
+                                    }
+                                    controllerTagEdit.clear();
+                                  },
+                                ),
+                          offline
+                              ? Container(
+                                  width: 0,
+                                  height: 0,
+                                )
+                              : SizedBox(
+                                  height: 15,
+                                ),
                           Wrap(
                               spacing: 8.0, // gap between adjacent chips
                               runSpacing: 4.0, // gap between lines
                               children:
                                   tagEditorList.map((e) => e.get()).toList()),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  return Color(0xff40444b);
-                                },
-                              ),
-                            ),
-                            child: Container(child: Text("Save")),
-                            onPressed: () {
-                              if (localMode) {
-                                updateImgTags(
-                                    tagEditorList.map((e) => e.tag).toList(),
-                                    recievedImages[index]);
-                                Navigator.pop(context2);
-                              } else {
-                                showLoading(context);
-                                makeNetworkRequest({
-                                  "tags": stringListToJSON(
-                                      tagEditorList.map((e) => e.tag).toList()),
-                                  "id": recievedImages[index].toString()
-                                }, "/set_img_tags", (json) {
-                                  Navigator.pop(context2);
-                                  hideLoading();
-                                }, null, context);
-                              }
-                            },
-                          ),
+                          offline
+                              ? Container(
+                                  width: 0,
+                                  height: 0,
+                                )
+                              : SizedBox(
+                                  height: 15,
+                                ),
+                          offline
+                              ? Container(
+                                  width: 0,
+                                  height: 0,
+                                )
+                              : ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty
+                                        .resolveWith<Color>(
+                                      (Set<MaterialState> states) {
+                                        return Color(0xff40444b);
+                                      },
+                                    ),
+                                  ),
+                                  child: Container(child: Text("Save")),
+                                  onPressed: () {
+                                    if (localMode) {
+                                      updateImgTags(
+                                          tagEditorList
+                                              .map((e) => e.tag)
+                                              .toList(),
+                                          recievedImages[index]);
+                                      Navigator.pop(context2);
+                                    } else {
+                                      showLoading(context);
+                                      makeNetworkRequest({
+                                        "tags": stringListToJSON(tagEditorList
+                                            .map((e) => e.tag)
+                                            .toList()),
+                                        "id": recievedImages[index].toString()
+                                      }, "/set_img_tags", (json) {
+                                        Navigator.pop(context2);
+                                        hideLoading();
+                                      }, null, context);
+                                    }
+                                  },
+                                ),
                         ],
                       ),
                     ),
@@ -251,7 +299,7 @@ class ImageViewerState extends State<ImageViewer> {
   }
 
   void edit(BuildContext context) {
-    if (localMode) {
+    if (localMode || offline) {
       editDialog(null, context);
     } else {
       showLoading(context);
@@ -263,12 +311,12 @@ class ImageViewerState extends State<ImageViewer> {
   }
 
   void share(BuildContext context) async {
-    if (localMode) {
+    if (localMode || offline) {
       Share.shareFiles([getLocalImage(recievedImages[index]).path]);
     } else {
       showLoading(context);
-      var response =
-          await http.get(server + "/image/" + recievedImages[index].toString());
+      var response = await http.get(
+          Uri.parse(server + "/image/" + recievedImages[index].toString()));
       Directory documentDirectory = await getApplicationDocumentsDirectory();
       String ext = ".jpg";
       if (lookupMimeType(join(documentDirectory.path, ''), headerBytes: [
@@ -365,10 +413,14 @@ class ImageViewerState extends State<ImageViewer> {
     final PageController controller = PageController(initialPage: index);
     return Scaffold(
         backgroundColor: Colors.black,
-        appBar: imageViewerBar("Image viewer", () => edit(context),
-            () => delete(context), () => share(context)),
+        appBar: offline
+            ? offlineImageViewerBar("Offline image viewer", () => edit(context),
+                () => share(context))
+            : imageViewerBar("Image viewer", () => edit(context),
+                () => delete(context), () => share(context)),
         body: PageView(
           scrollDirection: Axis.horizontal,
+          physics: pageViewPhysics,
           onPageChanged: (value) => index = value,
           controller: controller,
           children: getPages(),

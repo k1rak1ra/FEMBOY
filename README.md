@@ -15,7 +15,7 @@ https://github.com/KichangKim/DeepDanbooru
 
 Inspired by Hydrus (https://github.com/hydrusnetwork/hydrus), and intending to be a nicer-looking and easier to use version of it with far better server/sync features and a modern neural network based automated tagging system.
 
-Mobile client (WIP - working source available): (iOS, Android) 
+Mobile client (Version 0.1.0 available on Google Play): (iOS, Android) 
 - Made using Flutter
 - Runs either in local mode or in server client mode
 - In local mode, DD instance is run locally and all images and tag data are saved locally

@@ -24,3 +24,5 @@ Server/out/artifacts/FEMBOY_server_jar/FEMBOY_server
 META-INF/
 Desktop/target/
 Server/target/
+
+mobile/android/app/google-services.json
