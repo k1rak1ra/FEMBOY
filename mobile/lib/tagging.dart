@@ -30,7 +30,8 @@ Future<String> loadModel() async {
       numThreads: 1, // defaults to 1
       isAsset:
           false, // defaults to true, set to false to load resources outside assets
-      useGpuDelegate: true // defaults to false, set to true to use GPU delegate
+      useGpuDelegate:
+          false // defaults to false, set to true to use GPU delegate
       );
 }
 
@@ -51,7 +52,11 @@ Future<List<String>> tagImage(File image) async {
 
   print(recognitions);
   for (Map<dynamic, dynamic> item in recognitions) {
-    tags.add(item['label'] as String);
+    String s = item['label'];
+    if (Platform.isIOS && s.length > 2) {
+      s = s.substring(0, s.length - 1);
+    }
+    tags.add(s);
   }
   return tags;
 }

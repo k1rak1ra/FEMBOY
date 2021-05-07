@@ -93,6 +93,7 @@ class ImageViewerState extends State<ImageViewer> {
                         borderRadius: BorderRadius.all(Radius.circular(20.0))),
                     backgroundColor: Color(0xff2f3136),
                     content: Container(
+                      width: 300,
                       child: ListView(
                         shrinkWrap: true,
                         children: <Widget>[
@@ -234,6 +235,7 @@ class ImageViewerState extends State<ImageViewer> {
                                               Radius.circular(20.0))),
                                       backgroundColor: Color(0xff2f3136),
                                       content: Container(
+                                        width: 300,
                                         child: ListView(
                                           shrinkWrap: true,
                                           children: <Widget>[
@@ -342,6 +344,7 @@ class ImageViewerState extends State<ImageViewer> {
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           backgroundColor: Color(0xff2f3136),
           content: Container(
+            width: 300,
             child: ListView(
               shrinkWrap: true,
               children: <Widget>[

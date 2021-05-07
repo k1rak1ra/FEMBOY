@@ -49,6 +49,7 @@ void showIntroDialog(BuildContext context, Function setState) {
                 borderRadius: BorderRadius.all(Radius.circular(20.0))),
             backgroundColor: Color(0xff2f3136),
             content: Container(
+              width: 300,
               child: ListView(
                 shrinkWrap: true,
                 children: <Widget>[
@@ -143,6 +144,7 @@ void showServerAddressDialog(BuildContext context, Function setState) {
                 borderRadius: BorderRadius.all(Radius.circular(20.0))),
             backgroundColor: Color(0xff2f3136),
             content: Container(
+              width: 300,
               child: ListView(
                 shrinkWrap: true,
                 children: <Widget>[
@@ -229,6 +231,7 @@ void login(BuildContext context, Function setState) {
                 borderRadius: BorderRadius.all(Radius.circular(20.0))),
             backgroundColor: Color(0xff2f3136),
             content: Container(
+              width: 300,
               child: ListView(
                 shrinkWrap: true,
                 children: <Widget>[
@@ -348,6 +351,7 @@ void serverSetup(BuildContext context, Function setState) {
                 borderRadius: BorderRadius.all(Radius.circular(20.0))),
             backgroundColor: Color(0xff2f3136),
             content: Container(
+              width: 300,
               child: ListView(
                 shrinkWrap: true,
                 children: <Widget>[
@@ -560,6 +564,7 @@ void setupDone(BuildContext context, Function setState) {
                 borderRadius: BorderRadius.all(Radius.circular(20.0))),
             backgroundColor: Color(0xff2f3136),
             content: Container(
+              width: 300,
               child: ListView(
                 shrinkWrap: true,
                 children: <Widget>[

@@ -120,6 +120,7 @@ class SettingsState extends State<Settings> {
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               backgroundColor: Color(0xff2f3136),
               content: Container(
+                width: 300,
                 child: ListView(
                   shrinkWrap: true,
                   children: <Widget>[
@@ -295,6 +296,7 @@ class SettingsState extends State<Settings> {
                                             Radius.circular(20.0))),
                                     backgroundColor: Color(0xff2f3136),
                                     content: Container(
+                                      width: 300,
                                       child: ListView(
                                         shrinkWrap: true,
                                         children: <Widget>[
@@ -384,6 +386,7 @@ class SettingsState extends State<Settings> {
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               backgroundColor: Color(0xff2f3136),
               content: Container(
+                width: 300,
                 child: ListView(
                   shrinkWrap: true,
                   children: <Widget>[

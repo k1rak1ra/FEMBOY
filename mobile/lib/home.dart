@@ -143,6 +143,7 @@ class HomeState extends State<Home> {
                         borderRadius: BorderRadius.all(Radius.circular(20.0))),
                     backgroundColor: Color(0xff2f3136),
                     content: Container(
+                      width: 300,
                       child: ListView(
                         shrinkWrap: true,
                         children: <Widget>[
@@ -284,6 +285,7 @@ class HomeState extends State<Home> {
                               BorderRadius.all(Radius.circular(20.0))),
                       backgroundColor: Color(0xff2f3136),
                       content: Container(
+                        width: 300,
                         child: ListView(
                           shrinkWrap: true,
                           children: <Widget>[
@@ -366,14 +368,21 @@ class HomeState extends State<Home> {
   }
 
   void uploadFile(BuildContext context) async {
-    //TODO may need iOS fix https://pub.dev/packages/file_picker
-    FilePickerResult result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png']);
+    FilePickerResult result;
+
+    if (Platform.isIOS) {
+      result = await FilePicker.platform
+          .pickFiles(allowMultiple: true, type: FileType.image);
+    } else {
+      result = await FilePicker.platform.pickFiles(
+          allowMultiple: true,
+          type: FileType.custom,
+          allowedExtensions: ['jpg', 'jpeg', 'png']);
+    }
 
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path)).toList();
+      print(files);
       print(files.length.toString() + " files selected");
       progress = 0;
       bool uploadLoopLaunched = false;
@@ -393,6 +402,7 @@ class HomeState extends State<Home> {
                         borderRadius: BorderRadius.all(Radius.circular(20.0))),
                     backgroundColor: Color(0xff2f3136),
                     content: Container(
+                      width: 300,
                       child: ListView(
                         shrinkWrap: true,
                         children: <Widget>[
@@ -505,6 +515,7 @@ class HomeState extends State<Home> {
                       borderRadius: BorderRadius.all(Radius.circular(20.0))),
                   backgroundColor: Color(0xff2f3136),
                   content: Container(
+                    width: 300,
                     child: ListView(
                       shrinkWrap: true,
                       children: <Widget>[
@@ -563,6 +574,7 @@ class HomeState extends State<Home> {
                       borderRadius: BorderRadius.all(Radius.circular(20.0))),
                   backgroundColor: Color(0xff2f3136),
                   content: Container(
+                    width: 300,
                     child: ListView(
                       shrinkWrap: true,
                       children: <Widget>[
@@ -689,6 +701,7 @@ class HomeState extends State<Home> {
                               BorderRadius.all(Radius.circular(20.0))),
                       backgroundColor: Color(0xff2f3136),
                       content: Container(
+                        width: 300,
                         child: ListView(
                           shrinkWrap: true,
                           children: <Widget>[
@@ -845,6 +858,7 @@ class HomeState extends State<Home> {
                                       BorderRadius.all(Radius.circular(20.0))),
                               backgroundColor: Color(0xff2f3136),
                               content: Container(
+                                width: 300,
                                 child: ListView(
                                   shrinkWrap: true,
                                   children: <Widget>[
