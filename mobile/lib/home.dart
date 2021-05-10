@@ -382,6 +382,14 @@ class HomeState extends State<Home> {
 
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path)).toList();
+      for (File f in files) {
+        if (f.path.split(".").last != "jpg" &&
+            f.path.split(".").last != "jpeg" &&
+            f.path.split(".").last != "png") {
+          files.remove(f);
+        }
+      }
+
       print(files);
       print(files.length.toString() + " files selected");
       progress = 0;
@@ -453,8 +461,7 @@ class HomeState extends State<Home> {
   void launchTask(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    session =
-        SessionInfo(int.parse(packageInfo.buildNumber), packageInfo.version);
+    session = SessionInfo(packageInfo.version);
     await session.updateUserInfo();
     await setServer();
     await loadCharacters();

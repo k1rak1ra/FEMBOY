@@ -22,10 +22,10 @@ class SessionInfo {
   String token = "";
   String uid = "";
   String name = "";
-  int featureLevel;
+  int featureLevel = 1;
   String version;
   bool admin = false;
-  SessionInfo(this.featureLevel, this.version);
+  SessionInfo(this.version);
 
   Future<bool> updateUserInfo() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
